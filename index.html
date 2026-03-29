@@ -498,8 +498,8 @@ footer a { color: var(--cyan); text-decoration: none; }
       </div>
       <div id="email-thanks" style="display:none;margin-top:1rem;">
         <div style="font-size:32px;margin-bottom:.5rem;">✅</div>
-        <div style="font-size:16px;font-weight:700;color:var(--cyan);margin-bottom:.25rem;">Aangemeld!</div>
-        <div style="font-size:14px;color:var(--gray);">Je ontvangt elke maand een tip van CrisisMate.</div>
+        <div style="font-size:16px;font-weight:700;color:var(--cyan);margin-bottom:.25rem;">Bijna klaar!</div>
+        <div style="font-size:14px;color:var(--gray);">Je wordt doorgestuurd naar de aanmeldpagina. Vul daar je e-mail in om je aanmelding te bevestigen.</div>
       </div>
       <p style="font-size:12px;color:var(--gray);margin-top:1rem;opacity:.6;">Geen spam. Uitschrijven kan altijd. Privacy wordt gerespecteerd.</p>
     </div>
@@ -626,11 +626,15 @@ function submitEmail() {
   const email = document.getElementById('email-input').value.trim();
   if (!email || !email.includes('@')) {
     document.getElementById('email-input').style.borderColor = '#ef4444';
+    setTimeout(() => { document.getElementById('email-input').style.borderColor = 'var(--border)'; }, 2000);
     return;
   }
+  // Stuur naar Mailchimp signup pagina met e-mail vooringevuld
+  const url = 'http://eepurl.com/jCPDW2';
+  window.open(url, '_blank');
+  // Toon bedankmelding
   document.getElementById('email-form').style.display = 'none';
   document.getElementById('email-thanks').style.display = 'block';
-  // Hier koppel je later Mailchimp of een andere dienst aan
 }
 
 // ── KOPIEER LINK ──
