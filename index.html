@@ -53,15 +53,15 @@ nav {
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }
-.nav-logo { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+.nav-logo { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
 .nav-logo span { color: var(--cyan); }
 .nav-links { display: flex; align-items: center; gap: 2rem; }
-.nav-links a { font-size: 13px; color: var(--gray); text-decoration: none; transition: color .2s; }
+.nav-links a { font-size: 16px; color: var(--gray); text-decoration: none; transition: color .2s; }
 .nav-links a:hover { color: var(--white); }
 .nav-cta {
   background: var(--cyan); color: var(--navy) !important;
-  padding: 8px 18px; border-radius: 8px;
-  font-weight: 700 !important; font-size: 13px !important;
+  padding: 10px 22px; border-radius: 8px;
+  font-weight: 700 !important; font-size: 15px !important;
   transition: opacity .2s !important;
 }
 .nav-cta:hover { opacity: .85; }
@@ -112,10 +112,10 @@ nav {
 }
 .hero h1 em { font-style: normal; color: var(--cyan); }
 .hero p {
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
   color: var(--gray);
-  max-width: 520px;
-  line-height: 1.7;
+  max-width: 600px;
+  line-height: 1.8;
   margin-bottom: 2.5rem;
   font-weight: 300;
   animation: fadeUp .7s .2s ease both;
@@ -172,7 +172,7 @@ section { padding: 5rem 1.5rem; position: relative; z-index: 1; }
   font-weight: 800; line-height: 1.15; letter-spacing: -1px;
   margin-bottom: 1rem;
 }
-.section-sub { font-size: 1rem; color: var(--gray); line-height: 1.7; max-width: 520px; font-weight: 300; }
+.section-sub { font-size: 1.1rem; color: var(--gray); line-height: 1.8; max-width: 600px; font-weight: 300; }
 
 /* ── WHY ── */
 .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 3rem; }
@@ -182,9 +182,9 @@ section { padding: 5rem 1.5rem; position: relative; z-index: 1; }
   transition: border-color .2s, transform .2s;
 }
 .why-card:hover { border-color: rgba(6,214,160,0.3); transform: translateY(-2px); }
-.why-icon { font-size: 28px; margin-bottom: 1rem; }
-.why-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: .5rem; }
-.why-desc { font-size: 13px; color: var(--gray); line-height: 1.6; }
+.why-icon { font-size: 32px; margin-bottom: 1rem; }
+.why-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: .5rem; }
+.why-desc { font-size: 15px; color: var(--gray); line-height: 1.7; }
 
 /* ── DIVIDER ── */
 .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
@@ -193,7 +193,7 @@ section { padding: 5rem 1.5rem; position: relative; z-index: 1; }
 .info-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem; overflow-x: auto; scrollbar-width: none; }
 .info-tabs::-webkit-scrollbar { display: none; }
 .itab {
-  padding: 10px 20px; font-size: 13px; font-weight: 500;
+  padding: 12px 24px; font-size: 15px; font-weight: 500;
   color: var(--gray); background: none; border: none;
   border-bottom: 2px solid transparent; cursor: pointer;
   white-space: nowrap; transition: all .15s;
@@ -208,35 +208,35 @@ section { padding: 5rem 1.5rem; position: relative; z-index: 1; }
   background: var(--gray2); border: 1px solid var(--border);
   border-radius: 14px; padding: 1.25rem;
 }
-.check-card-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: .875rem; display: flex; align-items: center; gap: 8px; }
-.check-item { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.check-card-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: .875rem; display: flex; align-items: center; gap: 8px; }
+.check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
 .check-item:last-child { border-bottom: none; }
-.check-dot { width: 6px; height: 6px; min-width: 6px; border-radius: 50%; background: var(--cyan); margin-top: 6px; }
-.check-item span { font-size: 13px; color: #cbd5e1; line-height: 1.4; }
+.check-dot { width: 7px; height: 7px; min-width: 7px; border-radius: 50%; background: var(--cyan); margin-top: 7px; }
+.check-item span { font-size: 15px; color: #cbd5e1; line-height: 1.5; }
 
 /* ── STEPS ── */
 .steps { display: flex; flex-direction: column; gap: 1rem; }
-.step-row { display: flex; align-items: flex-start; gap: 1rem; background: var(--gray2); border: 1px solid var(--border); border-radius: 14px; padding: 1.125rem; }
-.step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: var(--blue); color: #fff; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
-.step-title { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 3px; }
-.step-desc { font-size: 12px; color: var(--gray); line-height: 1.5; }
+.step-row { display: flex; align-items: flex-start; gap: 1rem; background: var(--gray2); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; }
+.step-num { width: 32px; height: 32px; min-width: 32px; border-radius: 50%; background: var(--blue); color: #fff; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+.step-title { font-size: 16px; font-weight: 500; color: var(--white); margin-bottom: 3px; }
+.step-desc { font-size: 14px; color: var(--gray); line-height: 1.5; }
 
 /* ── SCENARIO CARDS ── */
 .scenario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
 .sc-card { background: var(--gray2); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; }
 .sc-head { display: flex; align-items: center; gap: 10px; margin-bottom: .875rem; }
 .sc-icon { font-size: 22px; }
-.sc-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
-.sc-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; margin-left: auto; }
+.sc-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+.sc-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; margin-left: auto; }
 .sc-badge.r { background: rgba(239,68,68,.15); color: #fca5a5; }
 .sc-badge.a { background: rgba(245,158,11,.15); color: #fcd34d; }
-.sc-tip { font-size: 12px; color: var(--gray); line-height: 1.6; }
+.sc-tip { font-size: 14px; color: var(--gray); line-height: 1.7; }
 
 /* ── NUMBERS ── */
 .numbers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
 .num-card { background: var(--gray2); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem; }
 .num-val { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--cyan); min-width: fit-content; }
-.num-label { font-size: 13px; color: var(--gray); line-height: 1.4; }
+.num-label { font-size: 15px; color: var(--gray); line-height: 1.4; }
 
 /* ── APP CTA ── */
 .app-cta {
@@ -253,17 +253,17 @@ section { padding: 5rem 1.5rem; position: relative; z-index: 1; }
   pointer-events: none;
 }
 .app-cta h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 1rem; }
-.app-cta p { font-size: 15px; color: var(--gray); margin-bottom: 2rem; font-weight: 300; }
+.app-cta p { font-size: 17px; color: var(--gray); margin-bottom: 2rem; font-weight: 300; }
 .install-steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
-.install-step { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; padding: .75rem 1rem; font-size: 12px; color: var(--gray); max-width: 180px; text-align: left; }
-.install-step strong { display: block; color: var(--white); font-size: 13px; margin-bottom: 3px; }
+.install-step { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; font-size: 14px; color: var(--gray); max-width: 210px; text-align: left; }
+.install-step strong { display: block; color: var(--white); font-size: 15px; margin-bottom: 5px; }
 
 /* ── FOOTER ── */
 footer {
   border-top: 1px solid var(--border);
   padding: 2rem 1.5rem;
   text-align: center;
-  font-size: 12px; color: var(--gray);
+  font-size: 14px; color: var(--gray);
 }
 footer a { color: var(--cyan); text-decoration: none; }
 
@@ -293,7 +293,7 @@ footer a { color: var(--cyan); text-decoration: none; }
   <h1 id="hero-h1">Klaar voor<br>elke <em>crisis.</em></h1>
   <p id="hero-p">CrisisMate geeft iedereen gratis toegang tot levensreddende informatie. Lees het hier op de website, of installeer de app op je telefoon voor altijd bij de hand.</p>
   <div class="hero-btns">
-    <a href="app.html" class="btn-primary" id="btn-app">📱 Open de app</a>
+    <a href="index.html" class="btn-primary" id="btn-app">📱 Open de app</a>
     <a href="#informatie" class="btn-secondary" id="btn-info">Lees de informatie ↓</a>
   </div>
   <div class="hero-stats">
@@ -442,13 +442,13 @@ footer a { color: var(--cyan); text-decoration: none; }
         <div class="install-step"><strong id="is2t">iPhone</strong><span id="is2d">Open crisimate.nl in Safari → tik op het deelknopje → "Zet op beginscherm"</span></div>
         <div class="install-step"><strong id="is3t">Computer</strong><span id="is3d">Open crisimate.nl in Chrome → klik op het installeer-icoontje in de adresbalk</span></div>
       </div>
-      <a href="app.html" class="btn-primary" id="cta-btn">📱 Open CrisisMate →</a>
+      <a href="index.html" class="btn-primary" id="cta-btn">📱 Open CrisisMate →</a>
     </div>
   </div>
 </section>
 
 <footer>
-  <p>© 2026 CrisisMate · <a href="app.html">Open app</a> · Gebaseerd op richtlijnen van Rijksoverheid &amp; Rode Kruis · Bel altijd 112 bij levensgevaar</p>
+  <p>© 2026 CrisisMate · <a href="index.html">Open app</a> · Gebaseerd op richtlijnen van Rijksoverheid &amp; Rode Kruis · Bel altijd 112 bij levensgevaar</p>
 </footer>
 
 <div class="lang-toggle">
