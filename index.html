@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a56db">
+<meta name="description" content="CrisisMate – 72-uur crisisvoorbereiding voor iedereen">
+<title>CrisisMate</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{
+  --primary:#1a56db;--primary-d:#1240a8;--primary-l:#e8f0fd;
+  --green:#1D9E75;--green-l:#e1f5ee;--green-d:#085041;
+  --amber:#BA7517;--amber-l:#faeeda;--amber-d:#633806;
+  --red:#c0392b;--red-l:#fceaea;--red-d:#8b1a1a;
+  --purple:#6c3fc5;--purple-l:#f0ecfd;--purple-d:#3d2070;
+  --teal:#0e7490;--teal-l:#e0f7fa;
+  --bg:#f4f6fb;--surface:#fff;--surface2:#f9fafb;
+  --text:#111827;--text2:#4b5563;--text3:#9ca3af;
+  --border:#e5e7eb;--radius:12px;--radius-sm:8px;
+  --shadow:0 1px 4px rgba(0,0,0,0.08);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;
+    --text:#f1f5f9;--text2:#94a3b8;--text3:#475569;
+    --border:#2d3348;--shadow:0 1px 4px rgba(0,0,0,0.3);
+    --primary-l:#1e2d5a;--green-l:#0d2a1e;--amber-l:#2a1e08;
+    --red-l:#2a0f0f;--purple-l:#1e1540;--teal-l:#0a2530;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+.app{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── HEADER ── */
+.header{background:var(--primary);color:#fff;padding:1rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{font-size:20px;font-weight:800;letter-spacing:-0.5px;}
+.logo span{opacity:.6;font-weight:400;font-size:13px;display:block;margin-top:-2px;}
+.header-right{display:flex;align-items:center;gap:8px;}
+.lang-sw{display:flex;border:1px solid rgba(255,255,255,0.3);border-radius:6px;overflow:hidden;}
+.lbtn{padding:3px 10px;font-size:11px;font-weight:700;cursor:pointer;background:transparent;color:rgba(255,255,255,0.6);border:none;}
+.lbtn.on{background:rgba(255,255,255,0.2);color:#fff;}
+
+/* ── BOTTOM NAV ── */
+.bnav{display:flex;background:var(--surface);border-top:1px solid var(--border);position:sticky;bottom:0;z-index:100;}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px 8px;font-size:10px;font-weight:600;color:var(--text3);background:none;border:none;cursor:pointer;transition:color .15s;}
+.bnav-btn.on{color:var(--primary);}
+.bnav-icon{font-size:20px;line-height:1;}
+
+/* ── SCREENS ── */
+.screen{display:none;flex:1;overflow-y:auto;}
+.screen.on{display:block;}
+.pad{padding:.75rem;}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:1rem;margin-bottom:.625rem;box-shadow:var(--shadow);}
+.card-sm{background:var(--surface);border-radius:var(--radius-sm);border:1px solid var(--border);padding:.75rem;margin-bottom:.5rem;}
+.card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:.625rem;display:flex;align-items:center;gap:8px;}
+.ci{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+
+/* ── BADGES ── */
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;}
+.b-r{background:var(--red-l);color:var(--red-d);}
+.b-a{background:var(--amber-l);color:var(--amber-d);}
+.b-g{background:var(--green-l);color:var(--green-d);}
+.b-b{background:var(--primary-l);color:var(--primary-d);}
+.b-p{background:var(--purple-l);color:var(--purple-d);}
+
+/* ── CHECKLIST ── */
+.ci-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.ci-row:last-child{border-bottom:none;}
+.cb{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;}
+.cb.on{background:var(--green);border-color:var(--green);}
+.cb svg{display:none;}
+.cb.on svg{display:block;}
+.ci-text{font-size:13px;color:var(--text);line-height:1.4;flex:1;}
+.ci-text.done{text-decoration:line-through;color:var(--text3);}
+
+/* ── PROGRESS ── */
+.prog-wrap{margin-bottom:.75rem;}
+.prog-top{display:flex;justify-content:space-between;margin-bottom:4px;}
+.prog-label{font-size:11px;color:var(--text2);}
+.prog-pct{font-size:11px;font-weight:700;color:var(--primary);}
+.prog-bg{background:var(--surface2);border-radius:99px;height:6px;}
+.prog-bar{height:6px;border-radius:99px;background:var(--green);transition:width .4s ease;}
+
+/* ── STEPS ── */
+.step{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.step:last-child{border-bottom:none;}
+.sn{display:inline-flex;width:22px;height:22px;min-width:22px;border-radius:50%;background:var(--primary-l);color:var(--primary);font-size:11px;font-weight:800;align-items:center;justify-content:center;}
+.st{font-size:13px;color:var(--text);line-height:1.4;}
+
+/* ── TIP / INFO ── */
+.tip{background:var(--surface2);border-radius:var(--radius-sm);padding:9px 11px;font-size:12px;color:var(--text2);line-height:1.5;margin-top:6px;}
+
+/* ── GRID TILES ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:.625rem;margin-bottom:.625rem;}
+.tile{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem .875rem;cursor:pointer;transition:border-color .15s;box-shadow:var(--shadow);}
+.tile:hover{border-color:var(--primary);}
+.tile-icon{font-size:26px;margin-bottom:6px;}
+.tile-title{font-size:13px;font-weight:700;color:var(--text);}
+.tile-sub{font-size:11px;color:var(--text2);margin-top:2px;}
+
+/* ── DASHBOARD ALERT ── */
+.d-alert{background:var(--amber-l);border:1px solid var(--amber);border-radius:var(--radius);padding:.75rem 1rem;margin-bottom:.75rem;display:flex;align-items:center;gap:10px;}
+.d-alert-dot{width:8px;height:8px;border-radius:50%;background:var(--amber);flex-shrink:0;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.d-alert-txt{font-size:12px;color:var(--amber-d);font-weight:600;line-height:1.3;}
+
+/* ── STAT CARDS ── */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.75rem;}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.625rem .5rem;text-align:center;}
+.stat-num{font-size:22px;font-weight:800;color:var(--primary);}
+.stat-lbl{font-size:10px;color:var(--text2);margin-top:1px;}
+
+/* ── SECTION HEADER ── */
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;}
+.sh-title{font-size:13px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;}
+.sh-link{font-size:12px;color:var(--primary);font-weight:600;cursor:pointer;}
+
+/* ── EMERGENCY NUMBERS ── */
+.erow{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);}
+.erow:last-child{border-bottom:none;}
+.elab{font-size:13px;color:var(--text);}
+.eval{font-size:16px;font-weight:800;color:var(--primary);}
+
+/* ── QUIZ ── */
+.quiz-q{font-size:14px;font-weight:600;color:var(--text);margin-bottom:.75rem;line-height:1.4;}
+.quiz-opt{display:block;width:100%;text-align:left;padding:10px 12px;margin-bottom:6px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text);cursor:pointer;transition:all .15s;}
+.quiz-opt:hover{border-color:var(--primary);}
+.quiz-opt.correct{background:var(--green-l);border-color:var(--green);color:var(--green-d);}
+.quiz-opt.wrong{background:var(--red-l);border-color:var(--red);color:var(--red-d);}
+.quiz-feedback{font-size:12px;margin-top:6px;padding:8px 10px;border-radius:var(--radius-sm);}
+.quiz-feedback.ok{background:var(--green-l);color:var(--green-d);}
+.quiz-feedback.nok{background:var(--red-l);color:var(--red-d);}
+
+/* ── BADGES / GAMIFICATION ── */
+.badge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.625rem;}
+.badge-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.75rem .5rem;text-align:center;}
+.badge-icon{font-size:28px;margin-bottom:4px;}
+.badge-name{font-size:11px;font-weight:700;color:var(--text);}
+.badge-status{font-size:10px;color:var(--text3);margin-top:2px;}
+.badge-card.earned{background:var(--green-l);border-color:var(--green);}
+.badge-card.earned .badge-status{color:var(--green-d);}
+
+/* ── CONTACTS ── */
+.contact-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+.contact-row:last-child{border-bottom:none;}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--primary-l);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}
+.contact-name{font-size:13px;font-weight:600;color:var(--text);}
+.contact-sub{font-size:11px;color:var(--text2);}
+.contact-num{font-size:12px;font-weight:700;color:var(--primary);margin-left:auto;}
+
+/* ── SCENARIO SELECTOR ── */
+.scenario-list{display:flex;flex-direction:column;gap:.5rem;}
+.scenario-item{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.75rem 1rem;cursor:pointer;transition:border-color .15s;}
+.scenario-item:hover{border-color:var(--primary);}
+.sc-icon{font-size:22px;flex-shrink:0;}
+.sc-title{font-size:13px;font-weight:700;color:var(--text);}
+.sc-sub{font-size:11px;color:var(--text2);}
+.sc-arrow{margin-left:auto;color:var(--text3);font-size:16px;}
+
+/* ── TABS (within screen) ── */
+.inner-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:.75rem;overflow-x:auto;scrollbar-width:none;}
+.inner-tabs::-webkit-scrollbar{display:none;}
+.itab{padding:9px 14px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;background:transparent;color:var(--text3);border:none;border-bottom:2px solid transparent;transition:all .15s;}
+.itab.on{color:var(--primary);border-bottom-color:var(--primary);}
+.itab-panel{display:none;}.itab-panel.on{display:block;}
+
+/* ── BACK BUTTON ── */
+.back-btn{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--primary);cursor:pointer;margin-bottom:.75rem;background:none;border:none;padding:0;}
+
+/* ── DOCUMENT ITEM ── */
+.doc-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+.doc-item:last-child{border-bottom:none;}
+.doc-icon{font-size:20px;flex-shrink:0;}
+.doc-name{font-size:13px;font-weight:600;color:var(--text);}
+.doc-sub{font-size:11px;color:var(--text2);}
+.doc-status{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;}
+.doc-status.opgeslagen{background:var(--green-l);color:var(--green-d);}
+.doc-status.ontbreekt{background:var(--red-l);color:var(--red-d);}
+
+/* ── INPUT ── */
+input[type=text]{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text);background:var(--surface);}
+input[type=text]:focus{outline:none;border-color:var(--primary);}
+
+/* ── BUTTON ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;border:none;transition:opacity .15s;}
+.btn:hover{opacity:.85;}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-outline{background:transparent;border:1px solid var(--primary);color:var(--primary);}
+.btn-green{background:var(--green);color:#fff;}
+.btn-sm{padding:6px 12px;font-size:12px;}
+.btn-full{width:100%;}
+
+/* ── OFFLINE BANNER ── */
+.offline-banner{display:none;background:var(--red-l);border:1px solid var(--red);border-radius:var(--radius-sm);padding:8px 12px;font-size:12px;color:var(--red-d);font-weight:600;margin-bottom:.75rem;text-align:center;}
+.offline-banner.show{display:block;}
+
+/* ── COMM TOOLS ── */
+.comm-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.comm-row:last-child{border-bottom:none;}
+.comm-icon{font-size:22px;flex-shrink:0;}
+.comm-title{font-size:13px;font-weight:600;color:var(--text);}
+.comm-sub{font-size:11px;color:var(--text2);}
+
+/* ── NOTES ── */
+textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text);background:var(--surface);resize:vertical;min-height:80px;font-family:inherit;}
+textarea:focus{outline:none;border-color:var(--primary);}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">CrisisMate<span id="hdr-sub">72-uur voorbereiding</span></div>
+  <div class="header-right">
+    <div class="lang-sw">
+      <button class="lbtn on" onclick="setLang('nl',this)">NL</button>
+      <button class="lbtn" onclick="setLang('en',this)">EN</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREENS -->
+
+<!-- ══ 1. DASHBOARD ══ -->
+<div id="s-home" class="screen on pad">
+  <div id="offline-banner" class="offline-banner" data-nl="Offline modus — alle inhoud beschikbaar" data-en="Offline mode — all content available">Offline modus — alle inhoud beschikbaar</div>
+
+  <div class="d-alert">
+    <div class="d-alert-dot"></div>
+    <div class="d-alert-txt" id="d-alert-txt" data-nl="Wees voorbereid — check jouw noodpakket vandaag" data-en="Be prepared — check your emergency kit today">Wees voorbereid — check jouw noodpakket vandaag</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="stat-items">0</div><div class="stat-lbl" data-nl="items klaar" data-en="items ready">items klaar</div></div>
+    <div class="stat"><div class="stat-num" id="stat-badges">0</div><div class="stat-lbl" data-nl="badges" data-en="badges">badges</div></div>
+    <div class="stat"><div class="stat-num">6</div><div class="stat-lbl" data-nl="scenario's" data-en="scenarios">scenario's</div></div>
+  </div>
+
+  <div class="sh"><div class="sh-title" data-nl="Snel aan de slag" data-en="Quick start">Snel aan de slag</div></div>
+  <div class="grid2">
+    <div class="tile" onclick="goScreen('s-prep');goNav('nav-prep')">
+      <div class="tile-icon">🛡️</div>
+      <div class="tile-title" data-nl="Voorbereiden" data-en="Prepare">Voorbereiden</div>
+      <div class="tile-sub" data-nl="Checklist &amp; pakketten" data-en="Checklist &amp; kits">Checklist &amp; pakketten</div>
+    </div>
+    <div class="tile" onclick="goScreen('s-crisis');goNav('nav-crisis')">
+      <div class="tile-icon">🚨</div>
+      <div class="tile-title" data-nl="In Crisis" data-en="In Crisis">In Crisis</div>
+      <div class="tile-sub" data-nl="Stap-voor-stap hulp" data-en="Step-by-step help">Stap-voor-stap hulp</div>
+    </div>
+    <div class="tile" onclick="goScreen('s-edu');goNav('nav-edu')">
+      <div class="tile-icon">🎓</div>
+      <div class="tile-title" data-nl="Educatie" data-en="Education">Educatie</div>
+      <div class="tile-sub" data-nl="Lessen &amp; quizzen" data-en="Lessons &amp; quizzes">Lessen &amp; quizzen</div>
+    </div>
+    <div class="tile" onclick="goScreen('s-personal');goNav('nav-me')">
+      <div class="tile-icon">👤</div>
+      <div class="tile-title" data-nl="Persoonlijk" data-en="Personal">Persoonlijk</div>
+      <div class="tile-sub" data-nl="Contacten &amp; docs" data-en="Contacts &amp; docs">Contacten &amp; docs</div>
+    </div>
+  </div>
+
+  <div class="sh" style="margin-top:.5rem;"><div class="sh-title" data-nl="Noodnummers" data-en="Emergency numbers">Noodnummers</div></div>
+  <div class="card-sm">
+    <div class="erow"><span class="elab" data-nl="Hulpdiensten" data-en="Emergency services">Hulpdiensten</span><span class="eval">112</span></div>
+    <div class="erow"><span class="elab" data-nl="Dierenambulance" data-en="Animal ambulance">Dierenambulance</span><span class="eval">144</span></div>
+    <div class="erow"><span class="elab" data-nl="Gasstoring" data-en="Gas outage">Gasstoring</span><span class="eval">0800-9009</span></div>
+    <div class="erow"><span class="elab" data-nl="Vergiftigingen" data-en="Poisons">Vergiftigingen</span><span class="eval" style="font-size:12px;">030-274 8888</span></div>
+  </div>
+</div>
+
+<!-- ══ 2. VOORBEREIDEN ══ -->
+<div id="s-prep" class="screen pad">
+  <div class="inner-tabs">
+    <button class="itab on" onclick="showItab('prep','t-pakket',this)" data-nl="Noodpakket" data-en="Emergency kit">Noodpakket</button>
+    <button class="itab" onclick="showItab('prep','t-scenarios',this)" data-nl="Scenario's" data-en="Scenarios">Scenario's</button>
+    <button class="itab" onclick="showItab('prep','t-docs',this)" data-nl="Documenten" data-en="Documents">Documenten</button>
+  </div>
+
+  <!-- Noodpakket -->
+  <div id="t-pakket" class="itab-panel on">
+    <div class="prog-wrap">
+      <div class="prog-top"><span class="prog-label" id="prep-label" data-nl="0 van 5 categorieën volledig" data-en="0 of 5 categories complete">0 van 5 categorieën volledig</span><span class="prog-pct" id="prep-pct">0%</span></div>
+      <div class="prog-bg"><div class="prog-bar" id="prep-bar" style="width:0%"></div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="ci" style="background:var(--green-l);">💧</div><span data-nl="Water &amp; voedsel" data-en="Water &amp; food">Water &amp; voedsel</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Minimaal 3 liter water per persoon per dag" data-en="At least 3 litres of water per person per day">Minimaal 3 liter water per persoon per dag</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Houdbaar voedsel voor 72 uur (blikken, droogkost, repen)" data-en="Non-perishable food for 72 hours (cans, dried goods, bars)">Houdbaar voedsel voor 72 uur (blikken, droogkost, repen)</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Handmatige blikopener" data-en="Manual can opener">Handmatige blikopener</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Campingkooktoestel + extra gaspatronen" data-en="Camping stove + spare gas canisters">Campingkooktoestel + extra gaspatronen</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="ci" style="background:var(--amber-l);">🔦</div><span data-nl="Licht &amp; energie" data-en="Light &amp; energy">Licht &amp; energie</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Zaklamp + reservebatterijen" data-en="Torch + spare batteries">Zaklamp + reservebatterijen</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Kaarsen + waterdichte lucifers of aansteker" data-en="Candles + waterproof matches or lighter">Kaarsen + waterdichte lucifers of aansteker</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Powerbank (volledig opgeladen, regelmatig bijladen)" data-en="Power bank (fully charged, top up regularly)">Powerbank (volledig opgeladen, regelmatig bijladen)</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Batterijradio (voor NL-Alert en nieuws)" data-en="Battery-powered radio (for NL-Alert and news)">Batterijradio (voor NL-Alert en nieuws)</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="ci" style="background:var(--red-l);">🏥</div><span data-nl="EHBO &amp; medicijnen" data-en="First aid &amp; medicine">EHBO &amp; medicijnen</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="EHBO-doos met pleisters, verband, ontsmettingsmiddel" data-en="First aid kit with plasters, bandages, antiseptic">EHBO-doos met pleisters, verband, ontsmettingsmiddel</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Persoonlijke medicijnen (minimaal 72 uur voorraad)" data-en="Personal medication (at least 72-hour supply)">Persoonlijke medicijnen (minimaal 72 uur voorraad)</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Pijnstillers + mondmaskers + wegwerphandschoenen" data-en="Pain relief + face masks + disposable gloves">Pijnstillers + mondmaskers + wegwerphandschoenen</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="ci" style="background:var(--primary-l);">📄</div><span data-nl="Documenten &amp; geld" data-en="Documents &amp; cash">Documenten &amp; geld</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Kopieën van paspoort, ID, verzekeringspapieren" data-en="Copies of passport, ID, insurance documents">Kopieën van paspoort, ID, verzekeringspapieren</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Contant geld in kleine coupures" data-en="Cash in small denominations">Contant geld in kleine coupures</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Noodcontacten op papier" data-en="Emergency contacts on paper">Noodcontacten op papier</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="ci" style="background:var(--purple-l);">🧥</div><span data-nl="Warmte, hygiëne &amp; huisdieren" data-en="Warmth, hygiene &amp; pets">Warmte, hygiëne &amp; huisdieren</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Warme deken of slaapzak per persoon" data-en="Warm blanket or sleeping bag per person">Warme deken of slaapzak per persoon</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Handdesinfectie, zeep en vochtige doekjes" data-en="Hand sanitiser, soap and wet wipes">Handdesinfectie, zeep en vochtige doekjes</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Reddingsdeken (folie) + fluitje" data-en="Emergency foil blanket + whistle">Reddingsdeken (folie) + fluitje</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Voer + water + medicijnen voor huisdier (72 uur)" data-en="Pet food + water + medication (72 hours)">Voer + water + medicijnen voor huisdier (72 uur)</span></div>
+      <div class="ci-row" onclick="toggle(this,'prep')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Transportbox of riem + kopie vaccinatiepaspoort dier" data-en="Pet carrier or leash + copy vaccination passport">Transportbox of riem + kopie vaccinatiepaspoort dier</span></div>
+    </div>
+  </div>
+
+  <!-- Scenario pakketten -->
+  <div id="t-scenarios" class="itab-panel">
+    <div id="sc-list" class="scenario-list">
+      <div class="scenario-item" onclick="showScenario('stroom')"><span class="sc-icon">⚡</span><div><div class="sc-title" data-nl="Stroomuitval" data-en="Power outage">Stroomuitval</div><div class="sc-sub" data-nl="Wat te doen en wat je nodig hebt" data-en="What to do and what you need">Wat te doen en wat je nodig hebt</div></div><span class="sc-arrow">›</span></div>
+      <div class="scenario-item" onclick="showScenario('water')"><span class="sc-icon">💧</span><div><div class="sc-title" data-nl="Wateruitval" data-en="Water outage">Wateruitval</div><div class="sc-sub" data-nl="Opslag, reiniging en gebruik" data-en="Storage, purification and use">Opslag, reiniging en gebruik</div></div><span class="sc-arrow">›</span></div>
+      <div class="scenario-item" onclick="showScenario('gas')"><span class="sc-icon">🔥</span><div><div class="sc-title" data-nl="Gaslek / Gasuitval" data-en="Gas leak / outage">Gaslek / Gasuitval</div><div class="sc-sub" data-nl="Veiligheid en maatregelen" data-en="Safety and measures">Veiligheid en maatregelen</div></div><span class="sc-arrow">›</span></div>
+      <div class="scenario-item" onclick="showScenario('storm')"><span class="sc-icon">🌩️</span><div><div class="sc-title" data-nl="Extreme weersomstandigheden" data-en="Extreme weather">Extreme weersomstandigheden</div><div class="sc-sub" data-nl="Storm, overstroming, extreme kou" data-en="Storm, flooding, extreme cold">Storm, overstroming, extreme kou</div></div><span class="sc-arrow">›</span></div>
+      <div class="scenario-item" onclick="showScenario('evacuatie')"><span class="sc-icon">🚗</span><div><div class="sc-title" data-nl="Evacuatie" data-en="Evacuation">Evacuatie</div><div class="sc-sub" data-nl="Wanneer je snel weg moet" data-en="When you need to leave fast">Wanneer je snel weg moet</div></div><span class="sc-arrow">›</span></div>
+      <div class="scenario-item" onclick="showScenario('cyber')"><span class="sc-icon">🖥️</span><div><div class="sc-title" data-nl="Cyberaanval / Netwerkstoringen" data-en="Cyber attack / network outage">Cyberaanval / Netwerkstoringen</div><div class="sc-sub" data-nl="Digitale verstoringen en impact" data-en="Digital disruptions and impact">Digitale verstoringen en impact</div></div><span class="sc-arrow">›</span></div>
+    </div>
+    <div id="sc-detail" style="display:none;">
+      <button class="back-btn" onclick="document.getElementById('sc-list').style.display='';document.getElementById('sc-detail').style.display='none';">‹ <span data-nl="Terug" data-en="Back">Terug</span></button>
+      <div id="sc-content"></div>
+    </div>
+  </div>
+
+  <!-- Documenten -->
+  <div id="t-docs" class="itab-panel">
+    <div class="card">
+      <div class="card-title" data-nl="Persoonlijke documenten" data-en="Personal documents">Persoonlijke documenten</div>
+      <div class="tip" style="margin-top:0;margin-bottom:.75rem;" data-nl="Sla digitale kopieën op in een veilige offline opslag (USB-stick) én in een beveiligde cloud. Geef ook een familielid toegang." data-en="Store digital copies on a secure offline medium (USB stick) and in a secure cloud. Also give a family member access.">Sla digitale kopieën op in een veilige offline opslag (USB-stick) én in een beveiligde cloud. Geef ook een familielid toegang.</div>
+      <div class="doc-item"><span class="doc-icon">🪪</span><div><div class="doc-name" data-nl="Paspoort / ID-kaart" data-en="Passport / ID card">Paspoort / ID-kaart</div><div class="doc-sub" data-nl="Alle gezinsleden" data-en="All family members">Alle gezinsleden</div></div><span class="doc-status opgeslagen" data-nl="Opgeslagen" data-en="Saved">Opgeslagen</span></div>
+      <div class="doc-item"><span class="doc-icon">🏥</span><div><div class="doc-name" data-nl="Zorgpas / Verzekeringskaart" data-en="Health insurance card">Zorgpas / Verzekeringskaart</div><div class="doc-sub" data-nl="Polisnummer meenemen" data-en="Include policy number">Polisnummer meenemen</div></div><span class="doc-status ontbreekt" data-nl="Ontbreekt" data-en="Missing">Ontbreekt</span></div>
+      <div class="doc-item"><span class="doc-icon">🏠</span><div><div class="doc-name" data-nl="Huurcontract / Eigendomsbewijs" data-en="Rental / ownership contract">Huurcontract / Eigendomsbewijs</div></div><span class="doc-status ontbreekt" data-nl="Ontbreekt" data-en="Missing">Ontbreekt</span></div>
+      <div class="doc-item"><span class="doc-icon">💊</span><div><div class="doc-name" data-nl="Medicijnenpaspoort" data-en="Medication passport">Medicijnenpaspoort</div><div class="doc-sub" data-nl="Dosering en voorschriften" data-en="Dosage and prescriptions">Dosering en voorschriften</div></div><span class="doc-status ontbreekt" data-nl="Ontbreekt" data-en="Missing">Ontbreekt</span></div>
+      <div class="doc-item"><span class="doc-icon">🐾</span><div><div class="doc-name" data-nl="Vaccinatiepaspoort huisdier" data-en="Pet vaccination passport">Vaccinatiepaspoort huisdier</div><div class="doc-sub" data-nl="Inclusief chipnummer" data-en="Including microchip number">Inclusief chipnummer</div></div><span class="doc-status ontbreekt" data-nl="Ontbreekt" data-en="Missing">Ontbreekt</span></div>
+    </div>
+    <button class="btn btn-outline btn-full" onclick="alert('In de echte app: bestand uploaden of foto maken')">📎 <span data-nl="Document toevoegen" data-en="Add document">Document toevoegen</span></button>
+  </div>
+</div>
+
+<!-- ══ 3. IN CRISIS ══ -->
+<div id="s-crisis" class="screen pad">
+  <div class="inner-tabs">
+    <button class="itab on" onclick="showItab('crisis','c-handleiding',this)" data-nl="Handleidingen" data-en="Guides">Handleidingen</button>
+    <button class="itab" onclick="showItab('crisis','c-ehbo',this)" data-nl="EHBO" data-en="First Aid">EHBO</button>
+    <button class="itab" onclick="showItab('crisis','c-comm',this)" data-nl="Communicatie" data-en="Communication">Communicatie</button>
+    <button class="itab" onclick="showItab('crisis','c-huisdieren',this)" data-nl="Huisdieren" data-en="Pets">Huisdieren</button>
+  </div>
+
+  <!-- Handleidingen -->
+  <div id="c-handleiding" class="itab-panel on">
+    <div class="scenario-list">
+      <div class="scenario-item" onclick="showCrisis('stroom')"><span class="sc-icon">⚡</span><div><div class="sc-title" data-nl="Stroomuitval" data-en="Power outage">Stroomuitval</div></div><span class="sc-arrow">›</span></div>
+      <div class="scenario-item" onclick="showCrisis('gas')"><span class="sc-icon">🔥</span><div><div class="sc-title" data-nl="Gaslek / Gasuitval" data-en="Gas leak / outage">Gaslek / Gasuitval</div></div><span class="sc-arrow">›</span></div>
+      <div class="scenario-item" onclick="showCrisis('water')"><span class="sc-icon">💧</span><div><div class="sc-title" data-nl="Wateruitval" data-en="Water outage">Wateruitval</div></div><span class="sc-arrow">›</span></div>
+      <div class="scenario-item" onclick="showCrisis('brand')"><span class="sc-icon">🔥</span><div><div class="sc-title" data-nl="Brand" data-en="Fire">Brand</div></div><span class="sc-arrow">›</span></div>
+      <div class="scenario-item" onclick="showCrisis('evacuatie')"><span class="sc-icon">🚗</span><div><div class="sc-title" data-nl="Evacuatie" data-en="Evacuation">Evacuatie</div></div><span class="sc-arrow">›</span></div>
+      <div class="scenario-item" onclick="showCrisis('storm')"><span class="sc-icon">🌩️</span><div><div class="sc-title" data-nl="Extreme weersomstandigheden" data-en="Extreme weather">Extreme weersomstandigheden</div></div><span class="sc-arrow">›</span></div>
+    </div>
+    <div id="crisis-detail" style="display:none;margin-top:.5rem;">
+      <button class="back-btn" onclick="document.getElementById('crisis-detail').style.display='none';document.querySelector('#c-handleiding .scenario-list').style.display=''">‹ <span data-nl="Terug" data-en="Back">Terug</span></button>
+      <div id="crisis-content"></div>
+    </div>
+  </div>
+
+  <!-- EHBO -->
+  <div id="c-ehbo" class="itab-panel">
+    <div class="card"><div class="card-title" data-nl="Reanimatie (CPR)" data-en="Resuscitation (CPR)">Reanimatie (CPR)</div><div class="step"><span class="sn">1</span><span class="st" data-nl="Controleer bewustzijn — roep luid, klop op schouder" data-en="Check consciousness — call loudly, tap shoulder">Controleer bewustzijn — roep luid, klop op schouder</span></div><div class="step"><span class="sn">2</span><span class="st" data-nl="Bel 112 of laat iemand anders bellen" data-en="Call 112 or have someone else call">Bel 112 of laat iemand anders bellen</span></div><div class="step"><span class="sn">3</span><span class="st" data-nl="30 borstcompressies — hard en snel (100–120/min)" data-en="30 chest compressions — hard and fast (100–120/min)">30 borstcompressies — hard en snel (100–120/min)</span></div><div class="step"><span class="sn">4</span><span class="st" data-nl="2 beademingen indien mogelijk. Herhaal tot hulp komt." data-en="2 rescue breaths if possible. Repeat until help arrives.">2 beademingen indien mogelijk. Herhaal tot hulp komt.</span></div></div>
+    <div class="card"><div class="card-title" data-nl="Ernstige bloeding" data-en="Severe bleeding">Ernstige bloeding</div><div class="step"><span class="sn">1</span><span class="st" data-nl="Druk stevig op wond met schone doek" data-en="Press firmly on wound with clean cloth">Druk stevig op wond met schone doek</span></div><div class="step"><span class="sn">2</span><span class="st" data-nl="Houd druk minimaal 10 min vast — niet loslaten" data-en="Maintain pressure for at least 10 min — do not release">Houd druk minimaal 10 min vast — niet loslaten</span></div><div class="step"><span class="sn">3</span><span class="st" data-nl="Leg persoon neer, hef ledemaat omhoog" data-en="Lay person down, elevate limb">Leg persoon neer, hef ledemaat omhoog</span></div><div class="step"><span class="sn">4</span><span class="st" data-nl="Bel 112 als bloeding aanhoudt" data-en="Call 112 if bleeding continues">Bel 112 als bloeding aanhoudt</span></div></div>
+    <div class="card"><div class="card-title" data-nl="Brandwonden" data-en="Burns">Brandwonden</div><div class="step"><span class="sn">1</span><span class="st" data-nl="Koel met lauw stromend water — min. 10 minuten" data-en="Cool under lukewarm running water — min. 10 minutes">Koel met lauw stromend water — min. 10 minuten</span></div><div class="step"><span class="sn">2</span><span class="st" data-nl="Verwijder sieraden, scheur geen kleding los" data-en="Remove jewellery, do not tear off clothing">Verwijder sieraden, scheur geen kleding los</span></div><div class="step"><span class="sn">3</span><span class="st" data-nl="Nooit boter of crème. Bel 112 bij grote brandwonden." data-en="Never butter or cream. Call 112 for severe burns.">Nooit boter of crème. Bel 112 bij grote brandwonden.</span></div></div>
+    <div class="card"><div class="card-title" data-nl="Verslikking" data-en="Choking">Verslikking</div><div class="step"><span class="sn">1</span><span class="st" data-nl="Stimuleer hard hoesten" data-en="Encourage forceful coughing">Stimuleer hard hoesten</span></div><div class="step"><span class="sn">2</span><span class="st" data-nl="5 slagen op de rug tussen schouderbladen" data-en="5 back blows between shoulder blades">5 slagen op de rug tussen schouderbladen</span></div><div class="step"><span class="sn">3</span><span class="st" data-nl="5 buikstoten (Heimlich) — krachtig omhoog" data-en="5 abdominal thrusts (Heimlich) — push firmly upward">5 buikstoten (Heimlich) — krachtig omhoog</span></div><div class="step"><span class="sn">4</span><span class="st" data-nl="Wissel af. Bel 112 als het aanhoudt." data-en="Alternate. Call 112 if it continues.">Wissel af. Bel 112 als het aanhoudt.</span></div></div>
+    <div class="card"><div class="card-title" data-nl="Onderkoeling" data-en="Hypothermia">Onderkoeling</div><div class="step"><span class="sn">1</span><span class="st" data-nl="Breng naar warme, droge omgeving" data-en="Move to warm, dry environment">Breng naar warme, droge omgeving</span></div><div class="step"><span class="sn">2</span><span class="st" data-nl="Verwijder natte kleding, wikkel in deken" data-en="Remove wet clothing, wrap in blanket">Verwijder natte kleding, wikkel in deken</span></div><div class="step"><span class="sn">3</span><span class="st" data-nl="Warme (niet hete) drank als bewust. Niet wrijven." data-en="Warm (not hot) drink if conscious. Do not rub.">Warme (niet hete) drank als bewust. Niet wrijven.</span></div><div class="step"><span class="sn">4</span><span class="st" data-nl="Bel 112 bij ernstige symptomen" data-en="Call 112 for severe symptoms">Bel 112 bij ernstige symptomen</span></div></div>
+  </div>
+
+  <!-- Communicatie -->
+  <div id="c-comm" class="itab-panel">
+    <div class="card">
+      <div class="card-title" data-nl="Offline communicatie &amp; signalen" data-en="Offline communication &amp; signals">Offline communicatie &amp; signalen</div>
+      <div class="comm-row"><span class="comm-icon">📻</span><div><div class="comm-title" data-nl="Batterijradio" data-en="Battery radio">Batterijradio</div><div class="comm-sub" data-nl="Luister naar Radio 1 of regionale omroep voor officiële berichten" data-en="Listen to Radio 1 or regional broadcaster for official updates">Luister naar Radio 1 of regionale omroep voor officiële berichten</div></div></div>
+      <div class="comm-row"><span class="comm-icon">📱</span><div><div class="comm-title">NL-Alert</div><div class="comm-sub" data-nl="Schakel in via Instellingen → Notificaties → Noodalarm" data-en="Enable via Settings → Notifications → Emergency alerts">Schakel in via Instellingen → Notificaties → Noodalarm</div></div></div>
+      <div class="comm-row"><span class="comm-icon">📡</span><div><div class="comm-title" data-nl="SMS als backup" data-en="SMS as backup">SMS als backup</div><div class="comm-sub" data-nl="Bij overbelaste netwerken lukt SMS vaker dan bellen" data-en="When networks are overloaded, SMS often works when calls don't">Bij overbelaste netwerken lukt SMS vaker dan bellen</div></div></div>
+      <div class="comm-row"><span class="comm-icon">🔦</span><div><div class="comm-title" data-nl="Licht- en fluitsignalen" data-en="Light and whistle signals">Licht- en fluitsignalen</div><div class="comm-sub" data-nl="SOS = 3 kort, 3 lang, 3 kort. Fluit of zaklamp." data-en="SOS = 3 short, 3 long, 3 short. Use whistle or torch.">SOS = 3 kort, 3 lang, 3 kort. Fluit of zaklamp.</div></div></div>
+      <div class="comm-row"><span class="comm-icon">🗺️</span><div><div class="comm-title" data-nl="Afgesproken ontmoetingspunt" data-en="Agreed meeting point">Afgesproken ontmoetingspunt</div><div class="comm-sub" data-nl="Spreek een vaste plek af met je huishouden — los van telefoon" data-en="Agree a fixed meeting spot with your household — independent of phones">Spreek een vaste plek af met je huishouden — los van telefoon</div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title" data-nl="Officiële bronnen" data-en="Official sources">Officiële bronnen</div>
+      <div class="tip" style="margin-top:0;white-space:pre-line;" data-nl="crisis.nl — crisisinformatie overheid
+denktvooru.nl — voorbereiding
+knmi.nl — weerswaarschuwingen
+rijksoverheid.nl — officiële berichten" data-en="crisis.nl — government crisis info
+denktvooru.nl — preparedness
+knmi.nl — weather warnings
+rijksoverheid.nl — official news">crisis.nl — crisisinformatie overheid
+denktvooru.nl — voorbereiding
+knmi.nl — weerswaarschuwingen
+rijksoverheid.nl — officiële berichten</div>
+    </div>
+  </div>
+
+  <!-- Huisdieren in crisis -->
+  <div id="c-huisdieren" class="itab-panel">
+    <div class="card">
+      <div class="card-title"><div class="ci" style="background:var(--green-l);">🐾</div><span data-nl="Noodpakket huisdier" data-en="Pet emergency kit">Noodpakket huisdier</span></div>
+      <div class="ci-row" onclick="toggle(this,'pet')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Voer + water voor 72 uur" data-en="Food + water for 72 hours">Voer + water voor 72 uur</span></div>
+      <div class="ci-row" onclick="toggle(this,'pet')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Medicijnen + vaccinatiepaspoort + chipnummer" data-en="Medication + vaccination passport + microchip number">Medicijnen + vaccinatiepaspoort + chipnummer</span></div>
+      <div class="ci-row" onclick="toggle(this,'pet')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Transportbox of riem + naamplaatje" data-en="Carrier or leash + ID tag">Transportbox of riem + naamplaatje</span></div>
+      <div class="ci-row" onclick="toggle(this,'pet')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Recente foto van het dier" data-en="Recent photo of your pet">Recente foto van het dier</span></div>
+      <div class="ci-row" onclick="toggle(this,'pet')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Vertrouwd speeltje of deken (vermindert stress)" data-en="Familiar toy or blanket (reduces stress)">Vertrouwd speeltje of deken (vermindert stress)</span></div>
+    </div>
+    <div class="card"><div class="card-title">🐕 <span data-nl="Honden" data-en="Dogs">Honden</span></div><div class="tip" style="margin-top:0;" data-nl="Honden vluchten in paniek. Altijd aan de riem bij evacuatie. Goed zittende halsband met naamplaatje. Hond tijdig naar binnen bij gevaar." data-en="Dogs flee in panic. Always on a leash during evacuation. Well-fitting collar with ID tag. Bring dog inside early when danger threatens.">Honden vluchten in paniek. Altijd aan de riem bij evacuatie. Goed zittende halsband met naamplaatje. Hond tijdig naar binnen bij gevaar.</div></div>
+    <div class="card"><div class="card-title">🐈 <span data-nl="Katten" data-en="Cats">Katten</span></div><div class="tip" style="margin-top:0;" data-nl="Katten verstoppen zich bij gevaar. Tijdig naar binnen halen. Stevige transportbox klaarhouden. Nooit alleen buitenlaten bij storm of brand." data-en="Cats hide when frightened. Bring inside early. Keep a secure carrier ready. Never leave alone outside during storms or fires.">Katten verstoppen zich bij gevaar. Tijdig naar binnen halen. Stevige transportbox klaarhouden. Nooit alleen buitenlaten bij storm of brand.</div></div>
+    <div class="card"><div class="card-title">🐇 <span data-nl="Kleine dieren" data-en="Small animals">Kleine dieren</span></div><div class="tip" style="margin-top:0;" data-nl="Gevoelig voor temperatuur en stress. Draagbare kooi gebruiken. Vogels zijn gevoelig voor rook — zet ze in frisse lucht. Vissen kunnen helaas niet altijd mee." data-en="Sensitive to temperature and stress. Use a portable cage. Birds are sensitive to smoke — move to fresh air. Fish unfortunately cannot always be evacuated.">Gevoelig voor temperatuur en stress. Draagbare kooi gebruiken. Vogels zijn gevoelig voor rook — zet ze in frisse lucht. Vissen kunnen helaas niet altijd mee.</div></div>
+    <div class="card-sm">
+      <div class="erow"><span class="elab" data-nl="Dierenambulance" data-en="Animal ambulance">Dierenambulance</span><span class="eval">144</span></div>
+      <div class="erow"><span class="elab">dierennoodhulp.nl</span><span class="eval" style="font-size:11px;" data-nl="bij rampen" data-en="disasters">bij rampen</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 4. EDUCATIE ══ -->
+<div id="s-edu" class="screen pad">
+  <div class="inner-tabs">
+    <button class="itab on" onclick="showItab('edu','e-lessen',this)" data-nl="Lessen" data-en="Lessons">Lessen</button>
+    <button class="itab" onclick="showItab('edu','e-quiz',this)" data-nl="Quiz" data-en="Quiz">Quiz</button>
+    <button class="itab" onclick="showItab('edu','e-badges',this)" data-nl="Badges" data-en="Badges">Badges</button>
+  </div>
+
+  <!-- Lessen -->
+  <div id="e-lessen" class="itab-panel on">
+    <div class="card-sm"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:22px;">🏠</span><div><div style="font-size:13px;font-weight:700;color:var(--text);" data-nl="Brandveiligheid thuis" data-en="Home fire safety">Brandveiligheid thuis</div><div style="font-size:11px;color:var(--text2);" data-nl="Voorkomen, detecteren, vluchten" data-en="Prevention, detection, escape">Voorkomen, detecteren, vluchten</div></div><span class="badge b-g" style="margin-left:auto;" data-nl="Basis" data-en="Basic">Basis</span></div><div class="tip" data-nl="Rookmelders op elke verdieping. Oefen de vluchtroute. Houd brandblussers bij de keuken. Bij brand: nooit de lift gebruiken. Kruip onder de rook door." data-en="Smoke detectors on every floor. Practise the escape route. Keep fire extinguishers in the kitchen. In a fire: never use the lift. Crawl under the smoke.">Rookmelders op elke verdieping. Oefen de vluchtroute. Houd brandblussers bij de keuken. Bij brand: nooit de lift gebruiken. Kruip onder de rook door.</div></div>
+    <div class="card-sm"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:22px;">🚶</span><div><div style="font-size:13px;font-weight:700;color:var(--text);" data-nl="Evacuatie plannen" data-en="Planning evacuation">Evacuatie plannen</div><div style="font-size:11px;color:var(--text2);" data-nl="Routes, ontmoetingspunt, timing" data-en="Routes, meeting point, timing">Routes, ontmoetingspunt, timing</div></div><span class="badge b-a" style="margin-left:auto;" data-nl="Gemiddeld" data-en="Medium">Gemiddeld</span></div><div class="tip" data-nl="Stel een primaire en secundaire vluchtroute in. Spreek een vast ontmoetingspunt af. Oefen regelmatig, ook met kinderen. Max. 15 minuten om je noodpakket te pakken." data-en="Set a primary and secondary escape route. Agree a fixed meeting point. Practise regularly, including with children. Max. 15 minutes to grab your emergency kit.">Stel een primaire en secundaire vluchtroute in. Spreek een vast ontmoetingspunt af. Oefen regelmatig, ook met kinderen. Max. 15 minuten om je noodpakket te pakken.</div></div>
+    <div class="card-sm"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:22px;">🌊</span><div><div style="font-size:13px;font-weight:700;color:var(--text);" data-nl="Overlevingstechnieken" data-en="Survival techniques">Overlevingstechnieken</div><div style="font-size:11px;color:var(--text2);" data-nl="Water zuiveren, warmte bewaren" data-en="Purifying water, retaining warmth">Water zuiveren, warmte bewaren</div></div><span class="badge b-r" style="margin-left:auto;" data-nl="Gevorderd" data-en="Advanced">Gevorderd</span></div><div class="tip" data-nl="Water zuiveren: 1 minuut koken, of waterreinigingstabletten gebruiken. Warmte: isoleer van de vloer, draag lagen. Hypothermie begint al bij 16°C omgevingstemperatuur." data-en="Purify water: boil for 1 minute, or use water purification tablets. Warmth: insulate from the floor, wear layers. Hypothermia can begin at ambient temperatures as low as 16°C.">Water zuiveren: 1 minuut koken, of waterreinigingstabletten gebruiken. Warmte: isoleer van de vloer, draag lagen. Hypothermie begint al bij 16°C omgevingstemperatuur.</div></div>
+    <div class="card-sm"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:22px;">📱</span><div><div style="font-size:13px;font-weight:700;color:var(--text);" data-nl="NL-Alert instellen" data-en="Setting up NL-Alert">NL-Alert instellen</div><div style="font-size:11px;color:var(--text2);" data-nl="Stap voor stap voor iOS en Android" data-en="Step by step for iOS and Android">Stap voor stap voor iOS en Android</div></div><span class="badge b-b" style="margin-left:auto;" data-nl="Basis" data-en="Basic">Basis</span></div><div class="tip" data-nl="Android: Instellingen → Notificaties → Draadloze noodwaarschuwingen → aan. iOS: Instellingen → Berichtgeving → Noodwaarschuwingen → aan." data-en="Android: Settings → Notifications → Wireless emergency alerts → on. iOS: Settings → Notifications → Emergency alerts → on.">Android: Instellingen → Notificaties → Draadloze noodwaarschuwingen → aan. iOS: Instellingen → Berichtgeving → Noodwaarschuwingen → aan.</div></div>
+  </div>
+
+  <!-- Quiz -->
+  <div id="e-quiz" class="itab-panel">
+    <div class="card" id="quiz-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
+        <span style="font-size:11px;color:var(--text2);" id="q-counter">Vraag 1 van 5</span>
+        <span class="badge b-b" id="q-score-badge">Score: 0</span>
+      </div>
+      <div class="quiz-q" id="q-text"></div>
+      <div id="q-options"></div>
+      <div id="q-feedback" class="quiz-feedback" style="display:none;"></div>
+      <button class="btn btn-primary btn-full" style="margin-top:.75rem;display:none;" id="q-next" onclick="nextQ()">
+        <span data-nl="Volgende vraag →" data-en="Next question →">Volgende vraag →</span>
+      </button>
+    </div>
+    <div id="quiz-result" style="display:none;" class="card">
+      <div style="text-align:center;padding:.5rem 0;">
+        <div style="font-size:36px;margin-bottom:.5rem;" id="result-emoji">🎉</div>
+        <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:.25rem;" id="result-title"></div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:1rem;" id="result-sub"></div>
+        <button class="btn btn-primary" onclick="startQuiz()"><span data-nl="Opnieuw proberen" data-en="Try again">Opnieuw proberen</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Badges -->
+  <div id="e-badges" class="itab-panel">
+    <div class="card">
+      <div class="card-title" data-nl="Jouw badges" data-en="Your badges">Jouw badges</div>
+      <div class="badge-grid" id="badge-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 5. PERSOONLIJK ══ -->
+<div id="s-personal" class="screen pad">
+  <div class="inner-tabs">
+    <button class="itab on" onclick="showItab('pers','p-contacts',this)" data-nl="Contacten" data-en="Contacts">Contacten</button>
+    <button class="itab" onclick="showItab('pers','p-notities',this)" data-nl="Notities" data-en="Notes">Notities</button>
+    <button class="itab" onclick="showItab('pers','p-plan',this)" data-nl="Noodplan" data-en="Emergency plan">Noodplan</button>
+  </div>
+
+  <!-- Noodcontacten -->
+  <div id="p-contacts" class="itab-panel on">
+    <div class="card">
+      <div class="card-title" data-nl="Mijn noodcontacten" data-en="My emergency contacts">Mijn noodcontacten</div>
+      <div class="contact-row"><div class="avatar">PA</div><div><div class="contact-name" data-nl="Papa / Mama" data-en="Dad / Mum">Papa / Mama</div><div class="contact-sub" data-nl="Familie" data-en="Family">Familie</div></div><div class="contact-num">—</div></div>
+      <div class="contact-row"><div class="avatar">BU</div><div><div class="contact-name" data-nl="Buren" data-en="Neighbours">Buren</div><div class="contact-sub" data-nl="Direct omgeving" data-en="Immediate area">Direct omgeving</div></div><div class="contact-num">—</div></div>
+      <div class="contact-row"><div class="avatar">HA</div><div><div class="contact-name" data-nl="Huisarts" data-en="GP">Huisarts</div><div class="contact-sub" data-nl="Medisch" data-en="Medical">Medisch</div></div><div class="contact-num">—</div></div>
+      <div class="contact-row"><div class="avatar">DI</div><div><div class="contact-name" data-nl="Dierenarts" data-en="Vet">Dierenarts</div><div class="contact-sub" data-nl="Huisdieren" data-en="Pets">Huisdieren</div></div><div class="contact-num">—</div></div>
+    </div>
+    <button class="btn btn-outline btn-full" onclick="alert('In de echte app: contact toevoegen via telefoonboek')">+ <span data-nl="Contact toevoegen" data-en="Add contact">Contact toevoegen</span></button>
+    <div style="margin-top:.75rem;" class="card-sm">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;" data-nl="Medische info (voor hulpverleners)" data-en="Medical info (for first responders)">Medische info (voor hulpverleners)</div>
+      <div class="tip" style="margin-top:0;font-size:12px;" data-nl="Sla hier bloedgroep, allergieën en medicatie op. Dit kan levens redden bij bewusteloosheid." data-en="Store blood type, allergies and medications here. This can save lives when unconscious.">Sla hier bloedgroep, allergieën en medicatie op. Dit kan levens redden bij bewusteloosheid.</div>
+    </div>
+  </div>
+
+  <!-- Notities -->
+  <div id="p-notities" class="itab-panel">
+    <div class="card">
+      <div class="card-title" data-nl="Mijn scenario-notities" data-en="My scenario notes">Mijn scenario-notities</div>
+      <div style="margin-bottom:.5rem;font-size:12px;color:var(--text2);" data-nl="Noteer hier je persoonlijke plannen, adressen, afspraken en extra items voor jouw situatie." data-en="Note your personal plans, addresses, agreements and extra items for your situation.">Noteer hier je persoonlijke plannen, adressen, afspraken en extra items voor jouw situatie.</div>
+      <textarea id="notes-ta" placeholder="Bijv: ontmoetingspunt = school hoek Kerkstraat / Raamstraat..." oninput="saveNotes()"></textarea>
+    </div>
+    <div class="card">
+      <div class="card-title" data-nl="Extra eigen checklist-items" data-en="Your own checklist items">Extra eigen checklist-items</div>
+      <div id="custom-items"></div>
+      <div style="display:flex;gap:8px;margin-top:.5rem;">
+        <input type="text" id="new-item" placeholder="Bijv: insuline spuiten..." />
+        <button class="btn btn-green btn-sm" onclick="addCustomItem()">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Noodplan -->
+  <div id="p-plan" class="itab-panel">
+    <div class="card">
+      <div class="card-title" data-nl="Persoonlijk noodplan" data-en="Personal emergency plan">Persoonlijk noodplan</div>
+      <div class="ci-row" onclick="toggle(this,'plan')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Noodcontact afgesproken met familie en buren" data-en="Emergency contact agreed with family and neighbours">Noodcontact afgesproken met familie en buren</span></div>
+      <div class="ci-row" onclick="toggle(this,'plan')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Ontmoetingspunt afgesproken buiten het huis" data-en="Meeting point agreed outside the home">Ontmoetingspunt afgesproken buiten het huis</span></div>
+      <div class="ci-row" onclick="toggle(this,'plan')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="NL-Alert ingeschakeld op alle telefoons" data-en="NL-Alert enabled on all phones">NL-Alert ingeschakeld op alle telefoons</span></div>
+      <div class="ci-row" onclick="toggle(this,'plan')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Noodpakket klaar en toegankelijk" data-en="Emergency kit ready and accessible">Noodpakket klaar en toegankelijk</span></div>
+      <div class="ci-row" onclick="toggle(this,'plan')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Locatie gasmeter en hoofdkraan bekend" data-en="Location of gas meter and main tap known">Locatie gasmeter en hoofdkraan bekend</span></div>
+      <div class="ci-row" onclick="toggle(this,'plan')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Locatie meterkast en hoofdzekering bekend" data-en="Location of fuse box and main fuse known">Locatie meterkast en hoofdzekering bekend</span></div>
+      <div class="ci-row" onclick="toggle(this,'plan')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Vluchtrouteplanning thuis besproken en geoefend" data-en="Evacuation route discussed and practised at home">Vluchtrouteplanning thuis besproken en geoefend</span></div>
+      <div class="ci-row" onclick="toggle(this,'plan')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text" data-nl="Noodpakket jaarlijks gecontroleerd op houdbaarheidsdatums" data-en="Emergency kit checked annually for expiry dates">Noodpakket jaarlijks gecontroleerd op houdbaarheidsdatums</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <button class="bnav-btn on" id="nav-home" onclick="goScreen('s-home');goNav('nav-home')"><span class="bnav-icon">🏠</span><span data-nl="Home" data-en="Home">Home</span></button>
+  <button class="bnav-btn" id="nav-prep" onclick="goScreen('s-prep');goNav('nav-prep')"><span class="bnav-icon">🛡️</span><span data-nl="Bereiden" data-en="Prepare">Bereiden</span></button>
+  <button class="bnav-btn" id="nav-crisis" onclick="goScreen('s-crisis');goNav('nav-crisis')"><span class="bnav-icon">🚨</span><span data-nl="Crisis" data-en="Crisis">Crisis</span></button>
+  <button class="bnav-btn" id="nav-edu" onclick="goScreen('s-edu');goNav('nav-edu')"><span class="bnav-icon">🎓</span><span data-nl="Leren" data-en="Learn">Leren</span></button>
+  <button class="bnav-btn" id="nav-me" onclick="goScreen('s-personal');goNav('nav-me')"><span class="bnav-icon">👤</span><span data-nl="Mijn" data-en="Mine">Mijn</span></button>
+</div>
+
+</div><!-- /app -->
+
+<script>
+let lang='nl';
+let quizScore=0, quizIdx=0;
+
+// ─── DATA ───
+const scenarios={
+  stroom:{
+    nl:{title:'Stroomuitval',items:['Koppel gevoelige apparaten los van het stopcontact','Gebruik kaarsen voorzichtig — nooit zonder toezicht','Koelkast blijft 4 uur goed, vriezer 24–48 uur — houd deur dicht','Gebruik geen aggregaat binnenshuis (koolmonoxide!)','Schakel niet-essentiële apparaten uit om overbelasting te voorkomen','Laad powerbank op zodra stroom terugkomt']},
+    en:{title:'Power outage',items:['Unplug sensitive devices from sockets','Use candles carefully — never unattended','Fridge stays safe 4 hours, freezer 24–48 hours — keep door shut','Never run a generator indoors (carbon monoxide!)','Switch off non-essential devices to prevent overload','Charge power bank as soon as power is restored']}
+  },
+  gas:{
+    nl:{title:'Gaslek / Gasuitval',items:['Sluit de gashoofkraan direct (naast de meter)','Ventileer direct — open alle ramen en deuren','Gebruik GEEN open vuur, aanstekers of schakelaars','Verlaat het pand onmiddellijk bij gaslucht','Bel 112 en Gasstoring: 0800-9009 van buiten het pand','Wacht op officieel sein veilig voordat je terugkeert']},
+    en:{title:'Gas leak / outage',items:['Close the main gas valve immediately (next to the meter)','Ventilate immediately — open all windows and doors','Do NOT use open flames, lighters or switches','Evacuate the building immediately if you smell gas','Call 112 and Gas outage: 0800-9009 from outside the building','Wait for the official all-clear before returning']}
+  },
+  water:{
+    nl:{title:'Wateruitval',items:['Vul direct alle beschikbare containers en het bad','Kook water als de kwaliteit onzeker is (1 minuut)','Gebruik waterreinigingstabletten als backup','Minimaal 3 liter drinkwater per persoon per dag','Gebruik toiletwater spaarzaam','Sla extra water op voor huisdieren (1 liter/dag)']},
+    en:{title:'Water outage',items:['Fill all available containers and the bathtub immediately','Boil water if quality is uncertain (1 minute)','Use water purification tablets as backup','Minimum 3 litres of drinking water per person per day','Use toilet water sparingly','Store extra water for pets (1 litre/day)']}
+  },
+  storm:{
+    nl:{title:'Extreme weersomstandigheden',items:['Ga naar binnen en blijf binnen','Ga naar de hoogste verdieping bij wateroverlast','Schakel elektriciteit uit bij waterindringing bij meterkast','Verlaat laaggelegen gebieden vroeg — rij nooit door overstroomd water','Zorg voor warme kleding en dekens bij vrieskou','Houd ramen en deuren gesloten bij storm']},
+    en:{title:'Extreme weather',items:['Go inside and stay inside','Move to the highest floor when flooding occurs','Switch off electricity at the fuse box if water enters','Leave low-lying areas early — never drive through floodwater','Have warm clothing and blankets ready in freezing conditions','Keep windows and doors closed during storms']}
+  },
+  evacuatie:{
+    nl:{title:'Evacuatie',items:['Pak je noodpakket — maximaal 15 minuten','Neem medicijnen, documenten, telefoon en opladers mee','Neem je huisdier mee + bijbehorende spullen','Informeer je noodcontact over je vertrek en bestemming','Volg officiële routes en instructies van hulpdiensten','Ga NIET terug voor spullen','Zet de gas- en elektriciteitshoofkraan uit bij vertrek']},
+    en:{title:'Evacuation',items:['Grab your emergency kit — maximum 15 minutes','Take medication, documents, phone and chargers','Take your pet + their supplies','Notify your emergency contact of your departure and destination','Follow official routes and instructions from emergency services','Do NOT go back for belongings','Turn off the main gas and electricity before leaving']}
+  },
+  cyber:{
+    nl:{title:'Cyberaanval / Netwerkstoringen',items:['Gebruik geen getroffen systemen of bankieren online','Schakel wifi en bluetooth uit als er een cyberdreiging is','Gebruik SMS of vaste telefoon voor communicatie','Houd contant geld beschikbaar — pinautomaten kunnen uitvallen','Volg officiële overheidsberichten via radio','Wijzig wachtwoorden zodra systemen veilig zijn']},
+    en:{title:'Cyber attack / network outage',items:["Don't use affected systems or online banking","Turn off wifi and bluetooth during a cyber threat","Use SMS or landline for communication","Keep cash available — ATMs may go offline","Follow official government updates via radio","Change passwords once systems are secure again"]}
+  }
+};
+
+const quizData=[
+  {nl:{q:'Hoeveel liter drinkwater per persoon per dag is het minimum tijdens een crisis?',opts:['1 liter','3 liter','5 liter','10 liter'],a:1,exp:'Minimaal 3 liter per persoon per dag is de aanbevolen hoeveelheid voor drinken, koken en hygiëne.'},
+   en:{q:'What is the minimum litres of drinking water per person per day during a crisis?',opts:['1 litre','3 litres','5 litres','10 litres'],a:1,exp:'A minimum of 3 litres per person per day is recommended for drinking, cooking and hygiene.'}},
+  {nl:{q:'Wat doe je ALS EERSTE bij een gaslek in huis?',opts:['Ramen openen','112 bellen','Hoofdkraan sluiten','Lichten aandoen'],a:2,exp:'Sluit altijd eerst de gashoofkraan. Daarna ventileer je en verlaat je het pand. Bel 112 van buiten.'},
+   en:{q:'What is the FIRST thing to do when there is a gas leak at home?',opts:['Open windows','Call 112','Close the main valve','Turn on lights'],a:2,exp:'Always close the main gas valve first. Then ventilate and evacuate. Call 112 from outside.'}},
+  {nl:{q:'Hoe lang moet je water koken om het veilig drinkbaar te maken?',opts:['30 seconden','1 minuut','5 minuten','10 minuten'],a:1,exp:'1 minuut koken is voldoende om ziekteverwekkers te doden. Op grote hoogte (>2000m) iets langer.'},
+   en:{q:'How long do you need to boil water to make it safe to drink?',opts:['30 seconds','1 minute','5 minutes','10 minutes'],a:1,exp:'1 minute of boiling is enough to kill pathogens. At high altitude (>2000m), boil a bit longer.'}},
+  {nl:{q:'Wat is het SOS-signaal met een zaklamp of fluitje?',opts:['3 lang, 3 kort, 3 lang','3 kort, 3 lang, 3 kort','5 kort, 1 lang','2 kort, 2 lang'],a:1,exp:'SOS in morse: 3 kort (S), 3 lang (O), 3 kort (S). Internationaal herkend noodsignaal.'},
+   en:{q:'What is the SOS signal with a torch or whistle?',opts:['3 long, 3 short, 3 long','3 short, 3 long, 3 short','5 short, 1 long','2 short, 2 long'],a:1,exp:'SOS in morse: 3 short (S), 3 long (O), 3 short (S). An internationally recognised distress signal.'}},
+  {nl:{q:'Hoe lang blijft een goed gevulde vriezer veilig bij stroomuitval als je de deur dicht houdt?',opts:['2–4 uur','8–12 uur','24–48 uur','1 week'],a:2,exp:'Een goed gevulde vriezer blijft bij gesloten deur 24 tot 48 uur op veilige temperatuur. Een halfvolle vriezer 12–24 uur.'},
+   en:{q:'How long does a well-stocked freezer remain safe during a power cut with the door closed?',opts:['2–4 hours','8–12 hours','24–48 hours','1 week'],a:2,exp:'A well-stocked freezer stays at a safe temperature for 24–48 hours with the door closed. A half-full freezer lasts 12–24 hours.'}}
+];
+
+const badgeData=[
+  {icon:'🛡️',nl:{name:'Eerste stap',status:'Noodpakket gestart'},en:{name:'First step',status:'Emergency kit started'},key:'badge-start'},
+  {icon:'✅',nl:{name:'Volledig pakket',status:'Alle items afgevinkt'},en:{name:'Full kit',status:'All items checked'},key:'badge-full'},
+  {icon:'🎓',nl:{name:'Quiz kampioen',status:'5/5 goed beantwoord'},en:{name:'Quiz champion',status:'5/5 correct'},key:'badge-quiz'},
+  {icon:'🏠',nl:{name:'Noodplan klaar',status:'Plan afgerond'},en:{name:'Plan complete',status:'Plan finished'},key:'badge-plan'},
+  {icon:'🐾',nl:{name:'Dierenvriend',status:'Huisdierpakket klaar'},en:{name:'Pet friend',status:'Pet kit complete'},key:'badge-pet'},
+  {icon:'📚',nl:{name:'Leerling',status:'Alle lessen gelezen'},en:{name:'Student',status:'All lessons read'},key:'badge-edu'}
+];
+
+// ─── STATE ───
+const state={earned:new Set(),prepChecked:0,prepTotal:0};
+
+// ─── LANG ───
+function setLang(l,btn){
+  lang=l;
+  document.querySelectorAll('.lbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('hdr-sub').textContent=l==='nl'?'72-uur voorbereiding':'72-hour preparedness';
+  document.querySelectorAll('[data-nl]').forEach(el=>{el.innerHTML=el.getAttribute('data-'+l);});
+  renderBadges();startQuiz();updateStats();
+}
+
+// ─── NAV ───
+function goScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');}
+function goNav(id){document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('on'));document.getElementById(id).classList.add('on');}
+
+// ─── INNER TABS ───
+function showItab(group,panelId,btn){
+  const panels=document.querySelectorAll('#'+{prep:'s-prep',crisis:'s-crisis',edu:'s-edu',pers:'s-personal'}[group]+' .itab-panel');
+  panels.forEach(p=>p.classList.remove('on'));
+  document.getElementById(panelId).classList.add('on');
+  const tabs=btn.closest('.inner-tabs').querySelectorAll('.itab');
+  tabs.forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  if(group==='edu'&&panelId==='e-quiz')startQuiz();
+  if(group==='edu'&&panelId==='e-badges')renderBadges();
+}
+
+// ─── CHECKLIST TOGGLE ───
+function toggle(row,section){
+  const cb=row.querySelector('.cb');
+  const txt=row.querySelector('.ci-text');
+  cb.classList.toggle('on');
+  txt.classList.toggle('done');
+  if(section==='prep')updatePrepProgress();
+  updateStats();checkBadges();
+}
+
+function updatePrepProgress(){
+  const cards=document.querySelectorAll('#t-pakket .card');
+  let full=0,tot=0,chk=0;
+  cards.forEach(c=>{const a=c.querySelectorAll('.ci-row').length,d=c.querySelectorAll('.cb.on').length;tot+=a;chk+=d;if(d===a&&a>0)full++;});
+  const pct=tot?Math.round(chk/tot*100):0;
+  document.getElementById('prep-bar').style.width=pct+'%';
+  document.getElementById('prep-pct').textContent=pct+'%';
+  document.getElementById('prep-label').textContent=lang==='nl'?full+' van 5 categorieën volledig':full+' of 5 categories complete';
+  state.prepChecked=chk;state.prepTotal=tot;
+}
+
+function updateStats(){
+  const tot=document.querySelectorAll('.cb.on').length;
+  document.getElementById('stat-items').textContent=tot;
+  document.getElementById('stat-badges').textContent=state.earned.size;
+}
+
+// ─── SCENARIOS ───
+function showScenario(key){
+  const d=scenarios[key][lang];
+  document.getElementById('sc-list').style.display='none';
+  const el=document.getElementById('sc-detail');
+  el.style.display='block';
+  document.getElementById('sc-content').innerHTML=
+    `<div class="card"><div class="card-title">${d.title}</div>`+
+    d.items.map((it,i)=>`<div class="step"><span class="sn">${i+1}</span><span class="st">${it}</span></div>`).join('')+
+    '</div>';
+}
+
+function showCrisis(key){
+  const d=scenarios[key][lang];
+  document.querySelector('#c-handleiding .scenario-list').style.display='none';
+  const el=document.getElementById('crisis-detail');
+  el.style.display='block';
+  document.getElementById('crisis-content').innerHTML=
+    `<div class="card"><div class="card-title">🚨 ${d.title}</div>`+
+    d.items.map((it,i)=>`<div class="step"><span class="sn">${i+1}</span><span class="st">${it}</span></div>`).join('')+
+    '</div>';
+}
+
+// ─── QUIZ ───
+function startQuiz(){
+  quizIdx=0;quizScore=0;
+  document.getElementById('quiz-card').style.display='';
+  document.getElementById('quiz-result').style.display='none';
+  renderQ();
+}
+
+function renderQ(){
+  if(quizIdx>=quizData.length){showResult();return;}
+  const q=quizData[quizIdx][lang];
+  document.getElementById('q-counter').textContent=(lang==='nl'?'Vraag ':'Question ')+(quizIdx+1)+' '+(lang==='nl'?'van':'of')+' '+quizData.length;
+  document.getElementById('q-score-badge').textContent='Score: '+quizScore;
+  document.getElementById('q-text').textContent=q.q;
+  document.getElementById('q-feedback').style.display='none';
+  document.getElementById('q-next').style.display='none';
+  document.getElementById('q-options').innerHTML=q.opts.map((o,i)=>
+    `<button class="quiz-opt" onclick="answerQ(${i})">${o}</button>`
+  ).join('');
+}
+
+function answerQ(idx){
+  const q=quizData[quizIdx][lang];
+  const btns=document.querySelectorAll('.quiz-opt');
+  btns.forEach(b=>b.disabled=true);
+  btns[idx].classList.add(idx===q.a?'correct':'wrong');
+  if(idx!==q.a)btns[q.a].classList.add('correct');
+  const fb=document.getElementById('q-feedback');
+  fb.style.display='block';
+  fb.className='quiz-feedback '+(idx===q.a?'ok':'nok');
+  fb.textContent=(idx===q.a?(lang==='nl'?'✓ Goed! ':'✓ Correct! '):(lang==='nl'?'✗ Helaas. ':'✗ Incorrect. '))+q.exp;
+  if(idx===q.a)quizScore++;
+  document.getElementById('q-next').style.display='block';
+}
+
+function nextQ(){quizIdx++;renderQ();}
+
+function showResult(){
+  document.getElementById('quiz-card').style.display='none';
+  const r=document.getElementById('quiz-result');
+  r.style.display='block';
+  const pct=Math.round(quizScore/quizData.length*100);
+  document.getElementById('result-emoji').textContent=pct>=80?'🏆':pct>=60?'👍':'📚';
+  document.getElementById('result-title').textContent=lang==='nl'?quizScore+' van '+quizData.length+' goed':quizScore+' of '+quizData.length+' correct';
+  document.getElementById('result-sub').textContent=pct>=80?(lang==='nl'?'Uitstekend! Je bent goed voorbereid.':'Excellent! You are well prepared.'):(lang==='nl'?'Oefen verder — kennis redt levens.':'Keep practising — knowledge saves lives.');
+  if(pct>=80)earnBadge('badge-quiz');
+  checkBadges();
+}
+
+// ─── BADGES ───
+function renderBadges(){
+  document.getElementById('badge-grid').innerHTML=badgeData.map(b=>{
+    const earned=state.earned.has(b.key);
+    return `<div class="badge-card${earned?' earned':''}"><div class="badge-icon">${b.icon}</div><div class="badge-name">${b[lang].name}</div><div class="badge-status">${earned?(lang==='nl'?'✓ Verdiend':'✓ Earned'):b[lang].status}</div></div>`;
+  }).join('');
+}
+
+function earnBadge(key){state.earned.add(key);renderBadges();updateStats();}
+
+function checkBadges(){
+  const tot=document.querySelectorAll('.cb.on').length;
+  if(tot>0)earnBadge('badge-start');
+  const prepTot=document.querySelectorAll('#t-pakket .ci-row').length;
+  const prepDone=document.querySelectorAll('#t-pakket .cb.on').length;
+  if(prepDone===prepTot&&prepTot>0)earnBadge('badge-full');
+  const planDone=document.querySelectorAll('#p-plan .cb.on').length;
+  const planTot=document.querySelectorAll('#p-plan .ci-row').length;
+  if(planDone===planTot&&planTot>0)earnBadge('badge-plan');
+  const petDone=document.querySelectorAll('#c-huisdieren .cb.on').length;
+  const petTot=document.querySelectorAll('#c-huisdieren .ci-row').length;
+  if(petDone===petTot&&petTot>0)earnBadge('badge-pet');
+  updateStats();
+}
+
+// ─── NOTES ───
+function saveNotes(){
+  try{localStorage.setItem('cm-notes',document.getElementById('notes-ta').value);}catch(e){}
+}
+function loadNotes(){
+  try{const n=localStorage.getItem('cm-notes');if(n)document.getElementById('notes-ta').value=n;}catch(e){}
+}
+
+// ─── CUSTOM ITEMS ───
+const customItems=[];
+function addCustomItem(){
+  const inp=document.getElementById('new-item');
+  const val=inp.value.trim();
+  if(!val)return;
+  customItems.push(val);inp.value='';
+  renderCustomItems();
+}
+function renderCustomItems(){
+  document.getElementById('custom-items').innerHTML=customItems.map((it,i)=>
+    `<div class="ci-row" onclick="toggle(this,'custom')"><div class="cb"><svg width="10" height="10" viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="white" stroke-width="2" fill="none"/></svg></div><span class="ci-text">${it}</span></div>`
+  ).join('');
+}
+
+// ─── OFFLINE ───
+function checkOnline(){
+  document.getElementById('offline-banner').classList.toggle('show',!navigator.onLine);
+}
+window.addEventListener('online',checkOnline);
+window.addEventListener('offline',checkOnline);
+
+// ─── PWA ───
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+// ─── INIT ───
+startQuiz();
+renderBadges();
+loadNotes();
+checkOnline();
+updateStats();
+</script>
+</body>
+</html>
