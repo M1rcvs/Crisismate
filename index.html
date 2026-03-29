@@ -442,13 +442,96 @@ footer a { color: var(--cyan); text-decoration: none; }
         <div class="install-step"><strong id="is2t">iPhone</strong><span id="is2d">Open crisimate.nl in Safari → tik op het deelknopje → "Zet op beginscherm"</span></div>
         <div class="install-step"><strong id="is3t">Computer</strong><span id="is3d">Open crisimate.nl in Chrome → klik op het installeer-icoontje in de adresbalk</span></div>
       </div>
-      <a href="index.html" class="btn-primary" id="cta-btn">📱 Open CrisisMate →</a>
+      <a href="app.html" class="btn-primary" id="cta-btn">📱 Open CrisisMate →</a>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="container">
+    <div class="section-label">Test jezelf</div>
+    <div class="section-title">Hoe voorbereid ben jij?</div>
+    <div class="section-sub" style="margin-bottom:2rem;">Doe de snelle test — 5 vragen, 2 minuten. Je krijgt direct persoonlijk advies.</div>
+    <div style="background:var(--gray2);border:1px solid var(--border);border-radius:20px;padding:2rem;max-width:640px;">
+      <div id="quiz-progress" style="margin-bottom:1.5rem;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:13px;color:var(--gray);" id="quiz-counter">Vraag 1 van 5</span>
+          <span style="font-size:13px;font-weight:700;color:var(--cyan);" id="quiz-pct">0%</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.08);border-radius:99px;height:5px;">
+          <div id="quiz-bar" style="height:5px;border-radius:99px;background:var(--cyan);width:0%;transition:width .4s;"></div>
+        </div>
+      </div>
+      <div id="quiz-q" style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:1.25rem;line-height:1.4;"></div>
+      <div id="quiz-opts" style="display:flex;flex-direction:column;gap:.625rem;"></div>
+      <div id="quiz-feedback" style="display:none;margin-top:1rem;padding:12px 16px;border-radius:10px;font-size:14px;line-height:1.5;"></div>
+      <button id="quiz-next" onclick="quizNext()" style="display:none;margin-top:1rem;width:100%;padding:12px;background:var(--cyan);color:var(--navy);border:none;border-radius:10px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">Volgende vraag →</button>
+      <div id="quiz-result" style="display:none;text-align:center;padding:1rem 0;">
+        <div id="quiz-emoji" style="font-size:48px;margin-bottom:.75rem;"></div>
+        <div id="quiz-result-title" style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:.5rem;"></div>
+        <div id="quiz-result-sub" style="font-size:15px;color:var(--gray);line-height:1.6;margin-bottom:1.5rem;"></div>
+        <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
+          <button onclick="quizStart()" style="padding:11px 22px;background:transparent;color:var(--cyan);border:1px solid var(--cyan);border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;">Opnieuw doen</button>
+          <a href="app.html" style="padding:11px 22px;background:var(--cyan);color:var(--navy);border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;">Open de app →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- E-MAIL AANMELDEN -->
+<section id="nieuwsbrief">
+  <div class="container">
+    <div style="background:linear-gradient(135deg,#0d1f3c,#061020);border:1px solid rgba(6,214,160,0.2);border-radius:24px;padding:3rem 2rem;text-align:center;max-width:640px;margin:0 auto;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:300px;height:200px;background:radial-gradient(circle,rgba(6,214,160,0.1),transparent 70%);pointer-events:none;"></div>
+      <div class="section-label" style="margin-bottom:1rem;">Blijf op de hoogte</div>
+      <h2 style="font-family:'Syne',sans-serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:800;letter-spacing:-1px;margin-bottom:.75rem;">Maandelijkse crisispreventietip</h2>
+      <p style="font-size:15px;color:var(--gray);margin-bottom:1.75rem;line-height:1.6;">Elke maand één praktische tip om beter voorbereid te zijn. Geen spam, alleen nuttige informatie. Altijd gratis.</p>
+      <div id="email-form" style="display:flex;gap:.75rem;max-width:420px;margin:0 auto;flex-wrap:wrap;justify-content:center;">
+        <input type="email" id="email-input" placeholder="jouw@email.nl" style="flex:1;min-width:200px;padding:12px 16px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:10px;color:var(--white);font-size:15px;outline:none;" onfocus="this.style.borderColor='var(--cyan)'" onblur="this.style.borderColor='var(--border)'">
+        <button onclick="submitEmail()" style="padding:12px 22px;background:var(--cyan);color:var(--navy);border:none;border-radius:10px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap;">Aanmelden →</button>
+      </div>
+      <div id="email-thanks" style="display:none;margin-top:1rem;">
+        <div style="font-size:32px;margin-bottom:.5rem;">✅</div>
+        <div style="font-size:16px;font-weight:700;color:var(--cyan);margin-bottom:.25rem;">Aangemeld!</div>
+        <div style="font-size:14px;color:var(--gray);">Je ontvangt elke maand een tip van CrisisMate.</div>
+      </div>
+      <p style="font-size:12px;color:var(--gray);margin-top:1rem;opacity:.6;">Geen spam. Uitschrijven kan altijd. Privacy wordt gerespecteerd.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- DEEL MET BUREN -->
+<section id="delen">
+  <div class="container" style="text-align:center;">
+    <div class="section-label">Samen voorbereid</div>
+    <div class="section-title">Deel met je buren</div>
+    <div class="section-sub" style="margin:0 auto 2rem;text-align:center;">Hoe meer mensen voorbereid zijn, hoe veiliger de buurt. Deel CrisisMate in één klik.</div>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="https://wa.me/?text=Heb%20jij%20al%20een%20noodpakket%3F%20CrisisMate%20helpt%20je%20voorbereid%20te%20zijn%20op%20elke%20crisis%20%E2%80%94%20check%20het%20hier%3A%20https%3A%2F%2Fcrisimate.nl" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:13px 24px;background:#25D366;color:#fff;border-radius:12px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;text-decoration:none;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Deel via WhatsApp
+      </a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://crisimate.nl" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:13px 24px;background:#1877F2;color:#fff;border-radius:12px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;text-decoration:none;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        Deel via Facebook
+      </a>
+      <button onclick="copyLink()" style="display:inline-flex;align-items:center;gap:10px;padding:13px 24px;background:var(--gray2);color:var(--white);border:1px solid var(--border);border-radius:12px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'" id="copy-btn">
+        🔗 Kopieer link
+      </button>
     </div>
   </div>
 </section>
 
 <footer>
-  <p>© 2026 CrisisMate · <a href="index.html">Open app</a> · Gebaseerd op richtlijnen van Rijksoverheid &amp; Rode Kruis · Bel altijd 112 bij levensgevaar</p>
+  <p>© 2026 CrisisMate · <a href="app.html">Open app</a> · Gebaseerd op richtlijnen van Rijksoverheid &amp; Rode Kruis · Bel altijd 112 bij levensgevaar</p>
 </footer>
 
 <div class="lang-toggle">
@@ -463,6 +546,106 @@ function showTab(id, btn) {
   document.getElementById(id).classList.add('on');
   btn.classList.add('on');
 }
+
+// ── QUIZ ──
+const quizVragen = [
+  { v: 'Heb jij thuis drinkwater opgeslagen voor minstens 3 dagen?', opts: ['Ja, meer dan genoeg', 'Een beetje', 'Nee, nog niet', 'Nooit bij stilgestaan'], score: [3,2,1,0] },
+  { v: 'Weet jij waar de hoofdgaskraan en meterkast in je huis zijn?', opts: ['Ja, beide', 'Eén van de twee', 'Nee', 'Huur — weet het niet'], score: [3,2,0,1] },
+  { v: 'Heb jij een EHBO-doos thuis met voldoende materiaal?', opts: ['Ja, volledig gevuld', 'Ja, maar verouderd', 'Een kleine doos', 'Nee'], score: [3,2,1,0] },
+  { v: 'Heb jij noodcontacten en belangrijke nummers opgeschreven op papier?', opts: ['Ja, alles staat op papier', 'Alleen in mijn telefoon', 'Nee', 'Nooit over nagedacht'], score: [3,2,0,0] },
+  { v: 'Weet jij wat je moet doen bij een stroomuitval van meer dan 24 uur?', opts: ['Ja, ik heb een plan', 'Ik heb een idee', 'Niet echt', 'Nee, geen idee'], score: [3,2,1,0] }
+];
+let quizIdx = 0, quizScore = 0;
+
+function quizStart() {
+  quizIdx = 0; quizScore = 0;
+  document.getElementById('quiz-result').style.display = 'none';
+  document.getElementById('quiz-progress').style.display = 'block';
+  document.getElementById('quiz-q').style.display = 'block';
+  document.getElementById('quiz-opts').style.display = 'flex';
+  quizRender();
+}
+
+function quizRender() {
+  const q = quizVragen[quizIdx];
+  const pct = Math.round((quizIdx / quizVragen.length) * 100);
+  document.getElementById('quiz-counter').textContent = 'Vraag ' + (quizIdx + 1) + ' van ' + quizVragen.length;
+  document.getElementById('quiz-pct').textContent = pct + '%';
+  document.getElementById('quiz-bar').style.width = pct + '%';
+  document.getElementById('quiz-q').textContent = q.v;
+  document.getElementById('quiz-feedback').style.display = 'none';
+  document.getElementById('quiz-next').style.display = 'none';
+  document.getElementById('quiz-opts').innerHTML = q.opts.map((o, i) =>
+    `<button onclick="quizAnswer(${i})" style="padding:12px 16px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;color:var(--white);font-size:15px;text-align:left;cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='var(--border)'">${o}</button>`
+  ).join('');
+}
+
+function quizAnswer(i) {
+  const q = quizVragen[quizIdx];
+  quizScore += q.score[i];
+  document.querySelectorAll('#quiz-opts button').forEach(b => b.disabled = true);
+  const fb = document.getElementById('quiz-feedback');
+  fb.style.display = 'block';
+  const s = q.score[i];
+  fb.style.background = s === 3 ? 'rgba(6,214,160,0.1)' : s >= 2 ? 'rgba(245,158,11,0.1)' : 'rgba(239,68,68,0.1)';
+  fb.style.color = s === 3 ? '#06d6a0' : s >= 2 ? '#f59e0b' : '#ef4444';
+  fb.style.border = '1px solid ' + (s === 3 ? 'rgba(6,214,160,0.3)' : s >= 2 ? 'rgba(245,158,11,0.3)' : 'rgba(239,68,68,0.3)');
+  fb.textContent = s === 3 ? '✓ Uitstekend! Je bent goed voorbereid op dit punt.' : s >= 2 ? '~ Goed begin, maar er is nog ruimte voor verbetering.' : '✗ Dit is een belangrijk aandachtspunt — de app helpt je hiermee.';
+  document.getElementById('quiz-next').style.display = 'block';
+  document.getElementById('quiz-next').textContent = quizIdx < quizVragen.length - 1 ? 'Volgende vraag →' : 'Bekijk mijn score →';
+}
+
+function quizNext() {
+  quizIdx++;
+  if (quizIdx >= quizVragen.length) { quizShowResult(); return; }
+  quizRender();
+}
+
+function quizShowResult() {
+  const max = quizVragen.length * 3;
+  const pct = Math.round((quizScore / max) * 100);
+  document.getElementById('quiz-progress').style.display = 'none';
+  document.getElementById('quiz-q').style.display = 'none';
+  document.getElementById('quiz-opts').style.display = 'none';
+  document.getElementById('quiz-feedback').style.display = 'none';
+  document.getElementById('quiz-next').style.display = 'none';
+  document.getElementById('quiz-bar').style.width = '100%';
+  const r = document.getElementById('quiz-result');
+  r.style.display = 'block';
+  let emoji, title, sub;
+  if (pct >= 80) { emoji = '🏆'; title = 'Uitstekend voorbereid!'; sub = 'Jij weet wat je doet. Controleer je noodpakket jaarlijks en deel CrisisMate met je buren — zij hebben jouw kennis ook nodig.'; }
+  else if (pct >= 50) { emoji = '👍'; title = 'Redelijk voorbereid'; sub = 'Je bent op de goede weg maar er zijn nog verbeterpunten. Open de app om stap voor stap een compleet noodpakket samen te stellen.'; }
+  else { emoji = '⚠️'; title = 'Nog niet klaar voor een crisis'; sub = 'Geen zorgen — het is nooit te laat om te beginnen. Open de app en zet vandaag je eerste stappen. Het duurt minder dan een uur.'; }
+  document.getElementById('quiz-emoji').textContent = emoji;
+  document.getElementById('quiz-result-title').textContent = title + ' (' + pct + '%)';
+  document.getElementById('quiz-result-sub').textContent = sub;
+}
+
+// ── E-MAIL ──
+function submitEmail() {
+  const email = document.getElementById('email-input').value.trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('email-input').style.borderColor = '#ef4444';
+    return;
+  }
+  document.getElementById('email-form').style.display = 'none';
+  document.getElementById('email-thanks').style.display = 'block';
+  // Hier koppel je later Mailchimp of een andere dienst aan
+}
+
+// ── KOPIEER LINK ──
+function copyLink() {
+  navigator.clipboard.writeText('https://crisimate.nl').then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Link gekopieerd!';
+    btn.style.borderColor = 'var(--cyan)';
+    btn.style.color = 'var(--cyan)';
+    setTimeout(() => { btn.innerHTML = '🔗 Kopieer link'; btn.style.borderColor = 'var(--border)'; btn.style.color = 'var(--white)'; }, 2500);
+  });
+}
+
+// Start quiz
+quizStart();
 
 const translations = {
   nl: {
