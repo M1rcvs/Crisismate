@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="CrisisMate – Gratis 72-uur crisisvoorbereiding voor iedereen. Noodpakket, EHBO, huisdieren en crisisscenario's. Direct beschikbaar, geen download nodig.">
+<meta property="og:title" content="CrisisMate – Ben jij voorbereid?">
+<meta property="og:description" content="Gratis crisisvoorbereiding voor iedereen. Noodpakket checklist, EHBO-gids, scenario's en meer.">
+<meta name="theme-color" content="#0a0f1e">
+<title>CrisisMate – Ben jij voorbereid?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0a0f1e;
+  --navy2: #111827;
+  --blue: #1d6bf3;
+  --blue-l: #4d8ff7;
+  --cyan: #06d6a0;
+  --cyan-d: #059c74;
+  --red: #ef4444;
+  --amber: #f59e0b;
+  --white: #f8fafc;
+  --gray: #94a3b8;
+  --gray2: #1e2a3a;
+  --border: rgba(255,255,255,0.08);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(10,15,30,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+.nav-logo span { color: var(--cyan); }
+.nav-links { display: flex; align-items: center; gap: 2rem; }
+.nav-links a { font-size: 13px; color: var(--gray); text-decoration: none; transition: color .2s; }
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  background: var(--cyan); color: var(--navy) !important;
+  padding: 8px 18px; border-radius: 8px;
+  font-weight: 700 !important; font-size: 13px !important;
+  transition: opacity .2s !important;
+}
+.nav-cta:hover { opacity: .85; }
+@media(max-width:600px){ .nav-links { gap: 1rem; } .nav-links a:not(.nav-cta) { display: none; } }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  padding: 8rem 1.5rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(6,214,160,0.12) 0%, transparent 70%);
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  pointer-events: none;
+}
+.hero-glow2 {
+  position: absolute;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(29,107,243,0.15) 0%, transparent 70%);
+  top: 20%; right: -10%;
+  pointer-events: none;
+}
+.alert-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3);
+  border-radius: 99px; padding: 6px 16px;
+  font-size: 12px; font-weight: 500; color: #fca5a5;
+  margin-bottom: 2rem;
+  animation: fadeUp .6s ease both;
+}
+.alert-chip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.8rem, 8vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -2px;
+  margin-bottom: 1.5rem;
+  animation: fadeUp .7s .1s ease both;
+}
+.hero h1 em { font-style: normal; color: var(--cyan); }
+.hero p {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  color: var(--gray);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  font-weight: 300;
+  animation: fadeUp .7s .2s ease both;
+}
+.hero-btns {
+  display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+  animation: fadeUp .7s .3s ease both;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--cyan); color: var(--navy);
+  padding: 14px 28px; border-radius: 10px;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px;
+  text-decoration: none; transition: all .2s;
+  border: none; cursor: pointer;
+}
+.btn-primary:hover { background: #04b589; transform: translateY(-1px); }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: var(--white);
+  padding: 14px 28px; border-radius: 10px;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px;
+  text-decoration: none; transition: all .2s;
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-1px); }
+.hero-stats {
+  display: flex; gap: 3rem; margin-top: 4rem; justify-content: center;
+  animation: fadeUp .7s .4s ease both;
+}
+.hero-stat { text-align: center; }
+.hero-stat-num { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--cyan); }
+.hero-stat-lbl { font-size: 12px; color: var(--gray); margin-top: 2px; }
+
+@keyframes fadeUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+
+/* ── SCROLL INDICATOR ── */
+.scroll-hint {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--gray); animation: fadeUp .7s .6s ease both;
+}
+.scroll-arrow { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--gray), transparent); }
+
+/* ── SECTION ── */
+section { padding: 5rem 1.5rem; position: relative; z-index: 1; }
+.container { max-width: 960px; margin: 0 auto; }
+.section-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  color: var(--cyan); text-transform: uppercase; margin-bottom: 1rem;
+}
+.section-title {
+  font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800; line-height: 1.15; letter-spacing: -1px;
+  margin-bottom: 1rem;
+}
+.section-sub { font-size: 1rem; color: var(--gray); line-height: 1.7; max-width: 520px; font-weight: 300; }
+
+/* ── WHY ── */
+.why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 3rem; }
+.why-card {
+  background: var(--gray2); border: 1px solid var(--border);
+  border-radius: 16px; padding: 1.5rem;
+  transition: border-color .2s, transform .2s;
+}
+.why-card:hover { border-color: rgba(6,214,160,0.3); transform: translateY(-2px); }
+.why-icon { font-size: 28px; margin-bottom: 1rem; }
+.why-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: .5rem; }
+.why-desc { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+/* ── DIVIDER ── */
+.divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+/* ── INFO SECTION ── */
+.info-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem; overflow-x: auto; scrollbar-width: none; }
+.info-tabs::-webkit-scrollbar { display: none; }
+.itab {
+  padding: 10px 20px; font-size: 13px; font-weight: 500;
+  color: var(--gray); background: none; border: none;
+  border-bottom: 2px solid transparent; cursor: pointer;
+  white-space: nowrap; transition: all .15s;
+}
+.itab.on { color: var(--cyan); border-bottom-color: var(--cyan); }
+.ipanel { display: none; }
+.ipanel.on { display: block; }
+
+/* ── CHECKLIST ── */
+.check-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+.check-card {
+  background: var(--gray2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.25rem;
+}
+.check-card-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: .875rem; display: flex; align-items: center; gap: 8px; }
+.check-item { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.check-item:last-child { border-bottom: none; }
+.check-dot { width: 6px; height: 6px; min-width: 6px; border-radius: 50%; background: var(--cyan); margin-top: 6px; }
+.check-item span { font-size: 13px; color: #cbd5e1; line-height: 1.4; }
+
+/* ── STEPS ── */
+.steps { display: flex; flex-direction: column; gap: 1rem; }
+.step-row { display: flex; align-items: flex-start; gap: 1rem; background: var(--gray2); border: 1px solid var(--border); border-radius: 14px; padding: 1.125rem; }
+.step-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: var(--blue); color: #fff; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+.step-title { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 3px; }
+.step-desc { font-size: 12px; color: var(--gray); line-height: 1.5; }
+
+/* ── SCENARIO CARDS ── */
+.scenario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.sc-card { background: var(--gray2); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; }
+.sc-head { display: flex; align-items: center; gap: 10px; margin-bottom: .875rem; }
+.sc-icon { font-size: 22px; }
+.sc-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+.sc-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; margin-left: auto; }
+.sc-badge.r { background: rgba(239,68,68,.15); color: #fca5a5; }
+.sc-badge.a { background: rgba(245,158,11,.15); color: #fcd34d; }
+.sc-tip { font-size: 12px; color: var(--gray); line-height: 1.6; }
+
+/* ── NUMBERS ── */
+.numbers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.num-card { background: var(--gray2); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem; }
+.num-val { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--cyan); min-width: fit-content; }
+.num-label { font-size: 13px; color: var(--gray); line-height: 1.4; }
+
+/* ── APP CTA ── */
+.app-cta {
+  background: linear-gradient(135deg, #0d1f3c 0%, #0a1628 50%, #061020 100%);
+  border: 1px solid rgba(29,107,243,0.2);
+  border-radius: 24px; padding: 3rem 2rem; text-align: center;
+  position: relative; overflow: hidden;
+}
+.app-cta::before {
+  content: '';
+  position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+  width: 400px; height: 300px;
+  background: radial-gradient(circle, rgba(6,214,160,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.app-cta h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 1rem; }
+.app-cta p { font-size: 15px; color: var(--gray); margin-bottom: 2rem; font-weight: 300; }
+.install-steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
+.install-step { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px; padding: .75rem 1rem; font-size: 12px; color: var(--gray); max-width: 180px; text-align: left; }
+.install-step strong { display: block; color: var(--white); font-size: 13px; margin-bottom: 3px; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  font-size: 12px; color: var(--gray);
+}
+footer a { color: var(--cyan); text-decoration: none; }
+
+/* ── LANG TOGGLE ── */
+.lang-toggle { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 200; display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--navy2); }
+.ltbn { padding: 6px 12px; font-size: 12px; font-weight: 700; cursor: pointer; background: transparent; color: var(--gray); border: none; }
+.ltbn.on { background: var(--cyan); color: var(--navy); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Crisis<span>Mate</span></div>
+  <div class="nav-links">
+    <a href="#informatie">Informatie</a>
+    <a href="#noodpakket">Noodpakket</a>
+    <a href="#ehbo">EHBO</a>
+    <a href="#app" class="nav-cta">Open app →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="alert-chip" id="hero-chip">De wereld verandert — ben jij voorbereid?</div>
+  <h1 id="hero-h1">Klaar voor<br>elke <em>crisis.</em></h1>
+  <p id="hero-p">CrisisMate geeft iedereen gratis toegang tot levensreddende informatie. Lees het hier op de website, of installeer de app op je telefoon voor altijd bij de hand.</p>
+  <div class="hero-btns">
+    <a href="index.html" class="btn-primary" id="btn-app">📱 Open de app</a>
+    <a href="#informatie" class="btn-secondary" id="btn-info">Lees de informatie ↓</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">72u</div><div class="hero-stat-lbl" id="stat1">voorbereiding</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">6</div><div class="hero-stat-lbl" id="stat2">crisisscenario's</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">100%</div><div class="hero-stat-lbl" id="stat3">gratis</div></div>
+  </div>
+  <div class="scroll-hint"><span id="scroll-hint-txt">scroll voor informatie</span><div class="scroll-arrow"></div></div>
+</section>
+
+<hr class="divider">
+
+<!-- WHY -->
+<section>
+  <div class="container">
+    <div class="section-label" id="why-label">Waarom CrisisMate</div>
+    <div class="section-title" id="why-title">Voorbereiding redt levens</div>
+    <div class="section-sub" id="why-sub">Stroomuitval, watercrisis, gaslek of extreme weersomstandigheden — het kan iedereen overkomen. CrisisMate helpt je voorbereid te zijn voordat het gebeurt.</div>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon">🌍</div><div class="why-title" id="wc1t">Actueel en relevant</div><div class="why-desc" id="wc1d">Gebaseerd op richtlijnen van de Rijksoverheid, het Rode Kruis en Europese crisisprotocollen.</div></div>
+      <div class="why-card"><div class="why-icon">📶</div><div class="why-title" id="wc2t">Werkt offline</div><div class="why-desc" id="wc2d">Alle informatie is beschikbaar zonder internet. Juist als het internet uitvalt heb je de app nodig.</div></div>
+      <div class="why-card"><div class="why-icon">👨‍👩‍👧</div><div class="why-title" id="wc3t">Voor iedereen</div><div class="why-desc" id="wc3d">Gezinnen, alleenstaanden, senioren, expats en reizigers. Beschikbaar in Nederlands en Engels.</div></div>
+      <div class="why-card"><div class="why-icon">🐾</div><div class="why-title" id="wc4t">Ook voor je huisdier</div><div class="why-desc" id="wc4d">Speciale gids voor honden, katten en kleine dieren. Want zij tellen ook mee in een noodsituatie.</div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- INFORMATIE -->
+<section id="informatie">
+  <div class="container">
+    <div class="section-label" id="info-label">Directe informatie</div>
+    <div class="section-title" id="info-title">Alles wat je moet weten</div>
+    <div class="section-sub" id="info-sub" style="margin-bottom:2.5rem;">Geen app nodig — lees hier direct de belangrijkste informatie voor noodsituaties.</div>
+
+    <div class="info-tabs">
+      <button class="itab on" onclick="showTab('t-pakket',this)" id="tab1">🛡️ Noodpakket</button>
+      <button class="itab" onclick="showTab('t-scenarios',this)" id="tab2">⚡ Scenario's</button>
+      <button class="itab" onclick="showTab('t-ehbo',this)" id="tab3">🏥 EHBO</button>
+      <button class="itab" onclick="showTab('t-nummers',this)" id="tab4">📞 Nummers</button>
+    </div>
+
+    <!-- Noodpakket -->
+    <div id="t-pakket" class="ipanel on">
+      <div class="check-grid">
+        <div class="check-card">
+          <div class="check-card-title">💧 <span id="cc1">Water &amp; voedsel</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci1">Minimaal 3 liter water per persoon per dag</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci2">Houdbaar voedsel voor 72 uur (blikken, droogkost, repen)</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci3">Handmatige blikopener</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci4">Campingkooktoestel + extra gaspatronen</span></div>
+        </div>
+        <div class="check-card">
+          <div class="check-card-title">🔦 <span id="cc2">Licht &amp; energie</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci5">Zaklamp + reservebatterijen</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci6">Kaarsen + waterdichte lucifers of aansteker</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci7">Powerbank (volledig opgeladen)</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci8">Batterijradio voor NL-Alert en nieuws</span></div>
+        </div>
+        <div class="check-card">
+          <div class="check-card-title">🏥 <span id="cc3">EHBO &amp; medicijnen</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci9">EHBO-doos met pleisters, verband, ontsmettingsmiddel</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci10">Persoonlijke medicijnen (72 uur voorraad)</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci11">Pijnstillers, mondmaskers en handschoenen</span></div>
+        </div>
+        <div class="check-card">
+          <div class="check-card-title">📄 <span id="cc4">Documenten &amp; geld</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci12">Kopieën van paspoort, ID, verzekeringspapieren</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci13">Contant geld in kleine coupures</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci14">Noodcontacten op papier</span></div>
+        </div>
+        <div class="check-card">
+          <div class="check-card-title">🧥 <span id="cc5">Warmte &amp; hygiëne</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci15">Warme deken of slaapzak per persoon</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci16">Handdesinfectie, zeep en vochtige doekjes</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci17">Reddingsdeken (folie) + fluitje</span></div>
+        </div>
+        <div class="check-card">
+          <div class="check-card-title">🐾 <span id="cc6">Huisdieren</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci18">Voer + water voor 72 uur</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci19">Medicijnen + vaccinatiepaspoort + chipnummer</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci20">Transportbox of riem + naamplaatje</span></div>
+          <div class="check-item"><div class="check-dot"></div><span id="ci21">Recente foto van het dier</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenario's -->
+    <div id="t-scenarios" class="ipanel">
+      <div class="scenario-grid">
+        <div class="sc-card"><div class="sc-head"><span class="sc-icon">⚡</span><span class="sc-title" id="sc1t">Stroomuitval</span><span class="sc-badge r" id="sc1b">Prioriteit 1</span></div><div class="sc-tip" id="sc1d">Koppel gevoelige apparaten los. Koelkast blijft 4 uur goed, vriezer 24–48 uur — houd deur dicht. Gebruik nooit een aggregaat binnenshuis vanwege koolmonoxide.</div></div>
+        <div class="sc-card"><div class="sc-head"><span class="sc-icon">🔥</span><span class="sc-title" id="sc2t">Gaslek</span><span class="sc-badge r" id="sc2b">Prioriteit 1</span></div><div class="sc-tip" id="sc2d">Sluit de hoofdkraan direct. Ventileer — open ramen en deuren. Geen open vuur of schakelaars. Verlaat het pand bij gaslucht. Bel 112 van buiten.</div></div>
+        <div class="sc-card"><div class="sc-head"><span class="sc-icon">💧</span><span class="sc-title" id="sc3t">Wateruitval</span><span class="sc-badge a" id="sc3b">Prioriteit 2</span></div><div class="sc-tip" id="sc3d">Vul direct alle containers en het bad. Kook water bij onzekere kwaliteit (1 minuut). Minimaal 3 liter drinkwater per persoon per dag.</div></div>
+        <div class="sc-card"><div class="sc-head"><span class="sc-icon">🌩️</span><span class="sc-title" id="sc4t">Extreme weersomstandigheden</span><span class="sc-badge a" id="sc4b">Prioriteit 2</span></div><div class="sc-tip" id="sc4d">Ga naar binnen en blijf binnen. Bij wateroverlast naar de hoogste verdieping. Rij nooit door overstroomd water. Verlaat laaggelegen gebieden vroeg.</div></div>
+        <div class="sc-card"><div class="sc-head"><span class="sc-icon">🚗</span><span class="sc-title" id="sc5t">Evacuatie</span><span class="sc-badge a" id="sc5b">Prioriteit 2</span></div><div class="sc-tip" id="sc5d">Pak je noodpakket in max. 15 minuten. Neem medicijnen, documenten, telefoon en huisdier mee. Volg officiële routes. Ga niet terug voor spullen.</div></div>
+        <div class="sc-card"><div class="sc-head"><span class="sc-icon">🖥️</span><span class="sc-title" id="sc6t">Cyberaanval</span><span class="sc-badge a" id="sc6b">Prioriteit 2</span></div><div class="sc-tip" id="sc6d">Gebruik geen getroffen systemen. Houd contant geld beschikbaar — pinautomaten kunnen uitvallen. Volg officiële berichten via radio.</div></div>
+      </div>
+    </div>
+
+    <!-- EHBO -->
+    <div id="t-ehbo" class="ipanel">
+      <div class="steps" id="ehbo-steps">
+        <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:.5rem;" id="ehbo-cpr-title">Reanimatie (CPR)</div>
+        <div class="step-row"><div class="step-num">1</div><div><div class="step-title" id="ehbo-s1">Controleer bewustzijn — roep luid, klop op schouder</div></div></div>
+        <div class="step-row"><div class="step-num">2</div><div><div class="step-title" id="ehbo-s2">Bel 112 of laat iemand anders bellen</div></div></div>
+        <div class="step-row"><div class="step-num">3</div><div><div class="step-title" id="ehbo-s3">30 borstcompressies — hard en snel (100–120 per minuut)</div></div></div>
+        <div class="step-row"><div class="step-num">4</div><div><div class="step-title" id="ehbo-s4">2 beademingen indien mogelijk — herhaal tot hulp komt</div></div></div>
+        <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--white);margin:.75rem 0 .5rem;" id="ehbo-bleed-title">Ernstige bloeding</div>
+        <div class="step-row"><div class="step-num">1</div><div><div class="step-title" id="ehbo-b1">Druk stevig op de wond met een schone doek</div></div></div>
+        <div class="step-row"><div class="step-num">2</div><div><div class="step-title" id="ehbo-b2">Houd druk minimaal 10 minuten vast — niet loslaten</div></div></div>
+        <div class="step-row"><div class="step-num">3</div><div><div class="step-title" id="ehbo-b3">Leg persoon neer, hef ledemaat omhoog indien mogelijk</div></div></div>
+        <div class="step-row"><div class="step-num">4</div><div><div class="step-title" id="ehbo-b4">Bel 112 als de bloeding aanhoudt</div></div></div>
+        <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--white);margin:.75rem 0 .5rem;" id="ehbo-burn-title">Brandwonden</div>
+        <div class="step-row"><div class="step-num">1</div><div><div class="step-title" id="ehbo-bu1">Koel met lauw stromend water — minimaal 10 minuten</div></div></div>
+        <div class="step-row"><div class="step-num">2</div><div><div class="step-title" id="ehbo-bu2">Verwijder sieraden, scheur geen kleding los</div></div></div>
+        <div class="step-row"><div class="step-num">3</div><div><div class="step-title" id="ehbo-bu3">Nooit boter of crème. Bel 112 bij grote brandwonden.</div></div></div>
+      </div>
+    </div>
+
+    <!-- Nummers -->
+    <div id="t-nummers" class="ipanel">
+      <div class="numbers-grid">
+        <div class="num-card"><div class="num-val">112</div><div class="num-label" id="num1">Hulpdiensten — brand, politie, ambulance</div></div>
+        <div class="num-card"><div class="num-val">144</div><div class="num-label" id="num2">Dierenambulance (landelijk)</div></div>
+        <div class="num-card"><div class="num-val" style="font-size:18px;">0900-8844</div><div class="num-label" id="num3">Politie — niet spoedeisend</div></div>
+        <div class="num-card"><div class="num-val" style="font-size:16px;">0800-9009</div><div class="num-label" id="num4">Gasstoring (gratis)</div></div>
+        <div class="num-card"><div class="num-val" style="font-size:14px;">030-274 8888</div><div class="num-label" id="num5">Vergiftigingen Informatiecentrum</div></div>
+        <div class="num-card"><div class="num-val" style="font-size:14px;">crisis.nl</div><div class="num-label" id="num6">Officiële crisisinformatie overheid</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- APP CTA -->
+<section id="app">
+  <div class="container">
+    <div class="app-cta">
+      <div class="section-label" id="cta-label" style="margin-bottom:1rem;">Altijd bij de hand</div>
+      <h2 id="cta-title">Installeer CrisisMate<br>op je telefoon</h2>
+      <p id="cta-sub">Gratis, werkt offline en staat direct op je beginscherm. Geen App Store nodig.</p>
+      <div class="install-steps">
+        <div class="install-step"><strong id="is1t">Android</strong><span id="is1d">Open crisimate.nl in Chrome → tik op de drie puntjes → "Toevoegen aan beginscherm"</span></div>
+        <div class="install-step"><strong id="is2t">iPhone</strong><span id="is2d">Open crisimate.nl in Safari → tik op het deelknopje → "Zet op beginscherm"</span></div>
+        <div class="install-step"><strong id="is3t">Computer</strong><span id="is3d">Open crisimate.nl in Chrome → klik op het installeer-icoontje in de adresbalk</span></div>
+      </div>
+      <a href="index.html" class="btn-primary" id="cta-btn">📱 Open CrisisMate →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 CrisisMate · <a href="index.html">Open app</a> · Gebaseerd op richtlijnen van Rijksoverheid &amp; Rode Kruis · Bel altijd 112 bij levensgevaar</p>
+</footer>
+
+<div class="lang-toggle">
+  <button class="ltbn on" onclick="setLang('nl',this)">NL</button>
+  <button class="ltbn" onclick="setLang('en',this)">EN</button>
+</div>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.ipanel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.itab').forEach(t => t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+}
+
+const translations = {
+  nl: {
+    'hero-chip': 'De wereld verandert — ben jij voorbereid?',
+    'hero-h1': 'Klaar voor<br>elke <em>crisis.</em>',
+    'hero-p': 'CrisisMate geeft iedereen gratis toegang tot levensreddende informatie. Lees het hier op de website, of installeer de app op je telefoon voor altijd bij de hand.',
+    'btn-app': '📱 Open de app', 'btn-info': 'Lees de informatie ↓',
+    'stat1': 'voorbereiding', 'stat2': "crisisscenario's", 'stat3': 'gratis',
+    'scroll-hint-txt': 'scroll voor informatie',
+    'why-label': 'Waarom CrisisMate', 'why-title': 'Voorbereiding redt levens',
+    'why-sub': 'Stroomuitval, watercrisis, gaslek of extreme weersomstandigheden — het kan iedereen overkomen. CrisisMate helpt je voorbereid te zijn voordat het gebeurt.',
+    'wc1t': 'Actueel en relevant', 'wc1d': 'Gebaseerd op richtlijnen van de Rijksoverheid, het Rode Kruis en Europese crisisprotocollen.',
+    'wc2t': 'Werkt offline', 'wc2d': 'Alle informatie is beschikbaar zonder internet. Juist als het internet uitvalt heb je de app nodig.',
+    'wc3t': 'Voor iedereen', 'wc3d': 'Gezinnen, alleenstaanden, senioren, expats en reizigers. Beschikbaar in Nederlands en Engels.',
+    'wc4t': 'Ook voor je huisdier', 'wc4d': 'Speciale gids voor honden, katten en kleine dieren. Want zij tellen ook mee in een noodsituatie.',
+    'info-label': 'Directe informatie', 'info-title': 'Alles wat je moet weten',
+    'info-sub': 'Geen app nodig — lees hier direct de belangrijkste informatie voor noodsituaties.',
+    'tab1': '🛡️ Noodpakket', 'tab2': '⚡ Scenario\'s', 'tab3': '🏥 EHBO', 'tab4': '📞 Nummers',
+    'cc1': 'Water & voedsel', 'cc2': 'Licht & energie', 'cc3': 'EHBO & medicijnen', 'cc4': 'Documenten & geld', 'cc5': 'Warmte & hygiëne', 'cc6': 'Huisdieren',
+    'ci1': 'Minimaal 3 liter water per persoon per dag', 'ci2': 'Houdbaar voedsel voor 72 uur (blikken, droogkost, repen)', 'ci3': 'Handmatige blikopener', 'ci4': 'Campingkooktoestel + extra gaspatronen',
+    'ci5': 'Zaklamp + reservebatterijen', 'ci6': 'Kaarsen + waterdichte lucifers of aansteker', 'ci7': 'Powerbank (volledig opgeladen)', 'ci8': 'Batterijradio voor NL-Alert en nieuws',
+    'ci9': 'EHBO-doos met pleisters, verband, ontsmettingsmiddel', 'ci10': 'Persoonlijke medicijnen (72 uur voorraad)', 'ci11': 'Pijnstillers, mondmaskers en handschoenen',
+    'ci12': 'Kopieën van paspoort, ID, verzekeringspapieren', 'ci13': 'Contant geld in kleine coupures', 'ci14': 'Noodcontacten op papier',
+    'ci15': 'Warme deken of slaapzak per persoon', 'ci16': 'Handdesinfectie, zeep en vochtige doekjes', 'ci17': 'Reddingsdeken (folie) + fluitje',
+    'ci18': 'Voer + water voor 72 uur', 'ci19': 'Medicijnen + vaccinatiepaspoort + chipnummer', 'ci20': 'Transportbox of riem + naamplaatje', 'ci21': 'Recente foto van het dier',
+    'sc1t': 'Stroomuitval', 'sc1b': 'Prioriteit 1', 'sc1d': 'Koppel gevoelige apparaten los. Koelkast blijft 4 uur goed, vriezer 24–48 uur — houd deur dicht. Gebruik nooit een aggregaat binnenshuis vanwege koolmonoxide.',
+    'sc2t': 'Gaslek', 'sc2b': 'Prioriteit 1', 'sc2d': 'Sluit de hoofdkraan direct. Ventileer — open ramen en deuren. Geen open vuur of schakelaars. Verlaat het pand bij gaslucht. Bel 112 van buiten.',
+    'sc3t': 'Wateruitval', 'sc3b': 'Prioriteit 2', 'sc3d': 'Vul direct alle containers en het bad. Kook water bij onzekere kwaliteit (1 minuut). Minimaal 3 liter drinkwater per persoon per dag.',
+    'sc4t': 'Extreme weersomstandigheden', 'sc4b': 'Prioriteit 2', 'sc4d': 'Ga naar binnen en blijf binnen. Bij wateroverlast naar de hoogste verdieping. Rij nooit door overstroomd water.',
+    'sc5t': 'Evacuatie', 'sc5b': 'Prioriteit 2', 'sc5d': 'Pak je noodpakket in max. 15 minuten. Neem medicijnen, documenten, telefoon en huisdier mee. Volg officiële routes.',
+    'sc6t': 'Cyberaanval', 'sc6b': 'Prioriteit 2', 'sc6d': 'Gebruik geen getroffen systemen. Houd contant geld beschikbaar. Volg officiële berichten via radio.',
+    'ehbo-cpr-title': 'Reanimatie (CPR)', 'ehbo-s1': 'Controleer bewustzijn — roep luid, klop op schouder', 'ehbo-s2': 'Bel 112 of laat iemand anders bellen', 'ehbo-s3': '30 borstcompressies — hard en snel (100–120 per minuut)', 'ehbo-s4': '2 beademingen indien mogelijk — herhaal tot hulp komt',
+    'ehbo-bleed-title': 'Ernstige bloeding', 'ehbo-b1': 'Druk stevig op de wond met een schone doek', 'ehbo-b2': 'Houd druk minimaal 10 minuten vast — niet loslaten', 'ehbo-b3': 'Leg persoon neer, hef ledemaat omhoog indien mogelijk', 'ehbo-b4': 'Bel 112 als de bloeding aanhoudt',
+    'ehbo-burn-title': 'Brandwonden', 'ehbo-bu1': 'Koel met lauw stromend water — minimaal 10 minuten', 'ehbo-bu2': 'Verwijder sieraden, scheur geen kleding los', 'ehbo-bu3': 'Nooit boter of crème. Bel 112 bij grote brandwonden.',
+    'num1': 'Hulpdiensten — brand, politie, ambulance', 'num2': 'Dierenambulance (landelijk)', 'num3': 'Politie — niet spoedeisend', 'num4': 'Gasstoring (gratis)', 'num5': 'Vergiftigingen Informatiecentrum', 'num6': 'Officiële crisisinformatie overheid',
+    'cta-label': 'Altijd bij de hand', 'cta-title': 'Installeer CrisisMate<br>op je telefoon', 'cta-sub': 'Gratis, werkt offline en staat direct op je beginscherm. Geen App Store nodig.',
+    'is1t': 'Android', 'is1d': 'Open crisimate.nl in Chrome → tik op de drie puntjes → "Toevoegen aan beginscherm"',
+    'is2t': 'iPhone', 'is2d': 'Open crisimate.nl in Safari → tik op het deelknopje → "Zet op beginscherm"',
+    'is3t': 'Computer', 'is3d': 'Open crisimate.nl in Chrome → klik op het installeer-icoontje in de adresbalk',
+    'cta-btn': '📱 Open CrisisMate →'
+  },
+  en: {
+    'hero-chip': 'The world is changing — are you prepared?',
+    'hero-h1': 'Ready for<br>any <em>crisis.</em>',
+    'hero-p': 'CrisisMate gives everyone free access to life-saving information. Read it here on the website, or install the app on your phone to always have it at hand.',
+    'btn-app': '📱 Open the app', 'btn-info': 'Read the information ↓',
+    'stat1': 'preparation', 'stat2': 'crisis scenarios', 'stat3': 'free',
+    'scroll-hint-txt': 'scroll for information',
+    'why-label': 'Why CrisisMate', 'why-title': 'Preparation saves lives',
+    'why-sub': 'Power outages, water crises, gas leaks or extreme weather — it can happen to anyone. CrisisMate helps you be prepared before it happens.',
+    'wc1t': 'Current and relevant', 'wc1d': 'Based on guidelines from the Dutch Government, Red Cross and European crisis protocols.',
+    'wc2t': 'Works offline', 'wc2d': 'All information is available without internet. Especially when the internet goes down, you need the app.',
+    'wc3t': 'For everyone', 'wc3d': 'Families, singles, seniors, expats and travellers. Available in Dutch and English.',
+    'wc4t': 'Also for your pet', 'wc4d': 'Special guide for dogs, cats and small animals. Because they matter too in an emergency.',
+    'info-label': 'Direct information', 'info-title': 'Everything you need to know',
+    'info-sub': 'No app needed — read the most important emergency information directly here.',
+    'tab1': '🛡️ Emergency kit', 'tab2': '⚡ Scenarios', 'tab3': '🏥 First aid', 'tab4': '📞 Numbers',
+    'cc1': 'Water & food', 'cc2': 'Light & energy', 'cc3': 'First aid & medicine', 'cc4': 'Documents & cash', 'cc5': 'Warmth & hygiene', 'cc6': 'Pets',
+    'ci1': 'At least 3 litres of water per person per day', 'ci2': 'Non-perishable food for 72 hours (cans, dried goods, bars)', 'ci3': 'Manual can opener', 'ci4': 'Camping stove + spare gas canisters',
+    'ci5': 'Torch + spare batteries', 'ci6': 'Candles + waterproof matches or lighter', 'ci7': 'Power bank (fully charged)', 'ci8': 'Battery-powered radio for emergency alerts and news',
+    'ci9': 'First aid kit with plasters, bandages, antiseptic', 'ci10': 'Personal medication (72-hour supply)', 'ci11': 'Pain relief, face masks and disposable gloves',
+    'ci12': 'Copies of passport, ID, insurance documents', 'ci13': 'Cash in small denominations', 'ci14': 'Emergency contacts on paper',
+    'ci15': 'Warm blanket or sleeping bag per person', 'ci16': 'Hand sanitiser, soap and wet wipes', 'ci17': 'Emergency foil blanket + whistle',
+    'ci18': 'Food + water for 72 hours', 'ci19': 'Medication + vaccination passport + microchip number', 'ci20': 'Carrier or leash + ID tag', 'ci21': 'Recent photo of your pet',
+    'sc1t': 'Power outage', 'sc1b': 'Priority 1', 'sc1d': 'Unplug sensitive devices. Fridge stays safe 4 hours, freezer 24–48 hours — keep door shut. Never run a generator indoors due to carbon monoxide.',
+    'sc2t': 'Gas leak', 'sc2b': 'Priority 1', 'sc2d': 'Close the main valve immediately. Ventilate — open windows and doors. No open flames or switches. Evacuate if you smell gas. Call 112 from outside.',
+    'sc3t': 'Water outage', 'sc3b': 'Priority 2', 'sc3d': 'Fill all containers and the bath immediately. Boil water if quality is uncertain (1 minute). Minimum 3 litres of drinking water per person per day.',
+    'sc4t': 'Extreme weather', 'sc4b': 'Priority 2', 'sc4d': 'Go inside and stay inside. Move to the highest floor during flooding. Never drive through floodwater.',
+    'sc5t': 'Evacuation', 'sc5b': 'Priority 2', 'sc5d': 'Grab your emergency kit in max. 15 minutes. Take medication, documents, phone and pet. Follow official routes.',
+    'sc6t': 'Cyber attack', 'sc6b': 'Priority 2', 'sc6d': 'Do not use affected systems. Keep cash available. Follow official updates via radio.',
+    'ehbo-cpr-title': 'Resuscitation (CPR)', 'ehbo-s1': 'Check consciousness — call loudly, tap shoulder', 'ehbo-s2': 'Call 112 or have someone else call', 'ehbo-s3': '30 chest compressions — hard and fast (100–120 per minute)', 'ehbo-s4': '2 rescue breaths if possible — repeat until help arrives',
+    'ehbo-bleed-title': 'Severe bleeding', 'ehbo-b1': 'Press firmly on the wound with a clean cloth', 'ehbo-b2': 'Maintain pressure for at least 10 minutes — do not release', 'ehbo-b3': 'Lay person down, elevate limb if possible', 'ehbo-b4': 'Call 112 if bleeding continues',
+    'ehbo-burn-title': 'Burns', 'ehbo-bu1': 'Cool under lukewarm running water — at least 10 minutes', 'ehbo-bu2': 'Remove jewellery, do not tear off clothing', 'ehbo-bu3': 'Never butter or cream. Call 112 for severe burns.',
+    'num1': 'Emergency services — fire, police, ambulance', 'num2': 'Animal ambulance (national)', 'num3': 'Police — non-emergency', 'num4': 'Gas outage (free)', 'num5': 'Poisons Information Centre', 'num6': 'Official government crisis information',
+    'cta-label': 'Always at hand', 'cta-title': 'Install CrisisMate<br>on your phone', 'cta-sub': 'Free, works offline and goes straight to your home screen. No App Store needed.',
+    'is1t': 'Android', 'is1d': 'Open crisimate.nl in Chrome → tap the three dots → "Add to home screen"',
+    'is2t': 'iPhone', 'is2d': 'Open crisimate.nl in Safari → tap the share button → "Add to Home Screen"',
+    'is3t': 'Computer', 'is3d': 'Open crisimate.nl in Chrome → click the install icon in the address bar',
+    'cta-btn': '📱 Open CrisisMate →'
+  }
+};
+
+function setLang(l, btn) {
+  document.querySelectorAll('.ltbn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  const t = translations[l];
+  Object.entries(t).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = val;
+  });
+}
+</script>
+</body>
+</html>
