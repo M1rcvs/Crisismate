@@ -147,8 +147,8 @@ nav {
   animation: fadeUp .7s .4s ease both;
 }
 .hero-stat { text-align: center; }
-.hero-stat-num { font-family: 'Syne', 'Helvetica Neue', Arial, sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--cyan); letter-spacing: -1px; }
-.hero-stat-lbl { font-size: 14px; color: var(--gray); margin-top: 4px; }
+.hero-stat-num { font-family: 'Syne', 'Helvetica Neue', Arial, sans-serif; font-size: clamp(1.4rem, 5vw, 2.2rem); font-weight: 800; color: var(--cyan); letter-spacing: -1px; }
+.hero-stat-lbl { font-size: clamp(11px, 3vw, 14px); color: var(--gray); margin-top: 4px; }
 
 @keyframes fadeUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
 
@@ -168,11 +168,25 @@ section { padding: 5rem 1.5rem; position: relative; z-index: 1; }
   color: var(--cyan); text-transform: uppercase; margin-bottom: 1rem;
 }
 .section-title {
-  font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-family: 'Syne', sans-serif; font-size: clamp(1.5rem, 5vw, 2.8rem);
   font-weight: 800; line-height: 1.15; letter-spacing: -1px;
   margin-bottom: 1rem;
 }
-.section-sub { font-size: 1.1rem; color: var(--gray); line-height: 1.8; max-width: 600px; font-weight: 300; }
+.section-sub { font-size: clamp(0.95rem, 3vw, 1.1rem); color: var(--gray); line-height: 1.8; max-width: 600px; font-weight: 300; }
+
+@media(max-width: 480px) {
+  section { padding: 3rem 1.25rem; }
+  .hero { padding: 6rem 1.25rem 3rem; }
+  .hero-stats { gap: 1.5rem; margin-top: 2.5rem; }
+  .why-card { padding: 1.25rem; }
+  .app-cta h2 { font-size: 1.5rem; }
+  .app-cta p { font-size: 14px; }
+  .install-step { max-width: 100%; font-size: 13px; }
+  /* Aanmeld sectie */
+  #nieuwsbrief h2 { font-size: clamp(1.2rem, 5vw, 1.6rem) !important; }
+  #nieuwsbrief p { font-size: 14px !important; }
+  #email-input { font-size: 14px; }
+}
 
 /* ── WHY ── */
 .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 3rem; }
@@ -278,9 +292,9 @@ footer a { color: var(--cyan); text-decoration: none; }
 <nav>
   <div class="nav-logo">Crisis<span>Mate</span></div>
   <div class="nav-links">
-    <a href="#informatie">Informatie</a>
-    <a href="#noodpakket">Noodpakket</a>
-    <a href="#ehbo">EHBO</a>
+    <a href="#informatie" onclick="setTimeout(()=>{showTab('t-pakket',document.querySelector('.itab'))},100)">Informatie</a>
+    <a href="#informatie" onclick="setTimeout(()=>{showTab('t-pakket',document.querySelectorAll('.itab')[0])},100)">Noodpakket</a>
+    <a href="#informatie" onclick="setTimeout(()=>{showTab('t-ehbo',document.querySelectorAll('.itab')[2])},100)">EHBO</a>
     <a href="app.html" class="nav-cta">Open app →</a>
   </div>
 </nav>
